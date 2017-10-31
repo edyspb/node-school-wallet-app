@@ -1,5 +1,11 @@
 language: node_js
 node_js:
-    - "8"
+- '8'
 script:
-    - npm run build
+- npm run build
+deploy:
+  provider: heroku
+  api_key:
+    secure: Ou2ug0UhIkMDdQKQRBCHca32d5b1Yq4jWFKmhST2d2pi3835NrKexRayqFc8+sIYkW4SqzWOBti1TGCml5B/Kiv+BiadUDZ/uoy77IV//WEjvkIkSGVNN5X25oUO83GwN3ywpqNEYldeVK/kA0fko1w1qYzozz+3xn7RC+eGNjbLzxK6ubX7XHPvS/Wac3jUItPkZISkjr0axF88z0purBhjlJlFlsHb7FrrLV6M+9gfpbtRnSnSyblz29krP+rH+Jm10dM+dI5PdmfdeCm88/paeXRR6iKWxiHB9EXc6AD0rVg7M7wC5NgMm9i/htekyAzNQwk53qf0ncXhVE2yIN1irwBXPpuPUVVP6ZH0WgfMx9I/NBHLTOWhWlJzKjzVmJQKgea/OnU9CJNdsJbVEZGZySrSWl09g3DeXoAu+o18iNG0xbcbqlQoxfP3TQmZTbr6JtwGgy6YBqGOW6nv12t5xVLmpoMXIFYLUsbpjab7SIzRyLfE0rTcu8hMXtNyBROdVGWQmv46MO2zZTfWu6ujpYst8iywdo+lf0ecOhm3saowK7FzanCLNQ+YL0oQytcZqu7TUx1wkFAQ9mLE/BqdlaVJvth+3RI8TY+OW8PONVjxWMYKdZupRUgvTGHsMhepR3HsbNoTuhh7c4Dc7dvy/TdFCFn3aE60qBAjjow=
+  on: travis_ci
+  run: npm start
