@@ -31,7 +31,7 @@ const TransactionsModel = require('source/models/transactions');
 const getTransactionsController = require('./controllers/transactions/get-transactions');
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/school-wallet', { useMongoClient: true });
+mongoose.connect('mongodb://localhost/yandexdb', { useMongoClient: true });
 mongoose.Promise = global.Promise;
 
 const app = new Koa();
@@ -49,7 +49,6 @@ async function getData(ctx) {
 	};
 	const cards = await ctx.cardsModel.getAll();
 	const transactions = await ctx.transactionsModel.getAll();
-
 	return {
 		user,
 		cards,
