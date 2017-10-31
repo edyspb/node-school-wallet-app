@@ -39,8 +39,9 @@ const CardType = styled.div`
 	opacity: ${({active}) => (active ? '1' : '0.6')};
 `;
 
+
 const NewCardLayout = styled(CardLayout)`
-	background-color: transparent;
+	background-color: ${({color}) => color};
 	background-image: url('/assets/cards-add.svg');
 	background-repeat: no-repeat;
 	background-position: center;
@@ -89,7 +90,8 @@ class Card extends Component {
 		const {data, type, active, isSingle, onClick, isCardsEditable, onChangeBarMode} = this.props;
 		if (type === 'new') {
 			return (
-				<NewCardLayout />
+				<NewCardLayout color={'transparent'} onClick={() => console.log(this.props)
+				} />
 			);
 		}
 
@@ -112,7 +114,6 @@ class Card extends Component {
 				</CardLayout>
 			);
 		}
-
 		const {number, theme, id} = data;
 		const {bgColor, textColor, bankLogoUrl, brandLogoUrl} = theme;
 		const themedBrandLogoUrl = active ? brandLogoUrl : brandLogoUrl.replace(/-colored.svg$/, '-white.svg');
