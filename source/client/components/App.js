@@ -173,7 +173,8 @@ class App extends Component {
 		const cards = this.props.data.cards;
 		cards[cards.length] = newCard;
 		const cardsList = App.prepareCardsData(cards);
-		this.setState({cardsList});
+		const cardHistory = App.prepareHistory(cardsList, []);
+		this.setState({cardsList, cardHistory});
 	}
 	/**
 	 * Рендер компонента
