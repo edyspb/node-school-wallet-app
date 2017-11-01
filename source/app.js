@@ -31,7 +31,9 @@ const TransactionsModel = require('source/models/transactions');
 const getTransactionsController = require('./controllers/transactions/get-transactions');
 
 const mongoose = require('mongoose');
-mongoose.connect('mongodb://mongo/school-wallet', { useMongoClient: true });
+
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1/school-wallet';
+mongoose.connect(MONGODB_URI, { useMongoClient: true });
 mongoose.Promise = global.Promise;
 
 const app = new Koa();
