@@ -123,7 +123,8 @@ const listenCallback = function() {
 	logger.info(`Application started on ${port}`);
 };
 
-const LISTEN_PORT = 3000;
+// process.env.PORT lets the port be set by Heroku
+const LISTEN_PORT = process.env.PORT || 3000;
 
 if (!module.parent && process.env.NODE_HTTPS) {
 	const protocolSecrets = {
