@@ -1,0 +1,15 @@
+version: '2'
+services:
+  web:
+    build: .
+    ports:
+      - "${PORT}:3000"
+    depends_on:
+      - mongo
+    links:
+      - "mongo:mongo"
+    command: "/app/docker_start.sh"
+  mongo:
+    image: "mongo:latest"
+    ports:
+      - "27017:27017"
