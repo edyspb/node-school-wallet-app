@@ -58,7 +58,7 @@ class Card extends Component {
 		super(props);
 
 		this.state = {
-			activeCardIndex: 0
+			activeCardIndex: 0,
 		};
 	}
 
@@ -81,7 +81,7 @@ class Card extends Component {
 		const {data, type, active, isSingle, onClick, isCardsEditable, onChangeBarMode} = this.props;
 		if (type === 'new') {
 			return (
-				<CardCreate />
+				<CardCreate onCreated={(newCard) => this.props.onCreated(newCard)} />
 			);
 		}
 
@@ -134,7 +134,8 @@ Card.propTypes = {
 	isSingle: PropTypes.bool,
 	isCardsEditable: PropTypes.bool,
 	onClick: PropTypes.func,
-	onChangeBarMode: PropTypes.func
+	onChangeBarMode: PropTypes.func,
+	onCreated: PropTypes.func
 };
 
 export default Card;

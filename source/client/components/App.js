@@ -169,6 +169,12 @@ class App extends Component {
 			});
 	}
 
+	onCreated(newCard) {
+		const cards = this.props.data.cards;
+		cards[cards.length] = newCard;
+		const cardsList = App.prepareCardsData(cards);
+		this.setState({cardsList});
+	}
 	/**
 	 * Рендер компонента
 	 *
@@ -194,7 +200,8 @@ class App extends Component {
 					isCardsEditable={isCardsEditable}
 					isCardRemoving={isCardRemoving}
 					deleteCard={(index) => this.deleteCard(index)}
-					onChangeBarMode={(event, index) => this.onChangeBarMode(event, index)} />
+					onChangeBarMode={(event, index) => this.onChangeBarMode(event, index)}
+					onCreated={(newCard) => this.onCreated(newCard)} />
 				<CardPane>
 					<Header activeCard={activeCard} />
 					<Workspace>

@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'emotion/react';
+import axios from 'axios';
 
-import {Island, Title, Button, Input} from './';
+
+import {Title, Button, Input} from './';
 
 const NewCardLayout = styled.div`
 	position: relative;
@@ -79,7 +81,11 @@ class CardCreate extends Component {
 
 	constructor(props) {
 		super(props);
-		this.state = {isView: false};
+		this.state = {
+			isView: false,
+			cardNumber: '',
+			balance: ''
+		};
 	}
 
 	onClick() {
@@ -87,14 +93,41 @@ class CardCreate extends Component {
 	}
 
 	onSubmitForm(event) {
-		console.log(event);
+		if (event) {
+			event.preventDefault();
+		}
+
+		const {cardNumber,  balance} = this.state;
+
+		axios
+			.post('/cards/', {cardNumber, balance})
+			.then((response) => {
+				const newCard = response.data;
+				newCard.cardNumber = Number(newCard.cardNumber);
+				newCard.balance = Number(newCard.balance);
+				this.props.onCreated(newCard);
+				this.setState({isView: false});
+			})
+			.catch((error) => console.log(error));
+	}
+
+	onChangeInputValue(event) {
+		if (!event) {
+			return;
+		}
+
+		const {name, value} = event.target;
+
+		this.setState({
+			[name]: value
+		});
 	}
 
 	render() {
 		const {isView} = this.state;
 		if (!isView) {
 			return (
-				<NewCardLayout onClick={() => this.onClick()}/>
+				<NewCardLayout onClick={() => this.onClick()} />
 			);
 		}
 		return (
@@ -104,15 +137,15 @@ class CardCreate extends Component {
 					<InputField>
 						<Label>Номер</Label>
 						<InputCardNumber
-							name='phoneNumber'
-							value={this.state.phoneNumber}
+							name='cardNumber'
+							value={this.state.cardNumber}
 							onChange={(event) => this.onChangeInputValue(event)} />
 					</InputField>
 					<InputField>
-						<Label>Сумма</Label>
+						<Label>Баланс</Label>
 						<InputSum
-							name='sum'
-							value={this.state.sum}
+							name='balance'
+							value={this.state.balance}
 							onChange={(event) => this.onChangeInputValue(event)} />
 						<Currency>₽</Currency>
 					</InputField>
@@ -121,12 +154,10 @@ class CardCreate extends Component {
 			</CreateCardLayout>
 		);
 	}
-
 }
 
 CardCreate.propTypes = {
-	isView: PropTypes.bool,
-	onClick: PropTypes.func
+	onCreated: PropTypes.func.isRequired
 };
 
 export default CardCreate;
