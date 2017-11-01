@@ -78,6 +78,24 @@ const CreateButton = styled(Button)`
 	float: left;
 `;
 
+const ErrorButton = styled.button`
+	height: 36px;
+	width: 224px;
+	font-size: 18px;
+	font-weight: 600;
+	border: none;
+	border-radius: 3px;
+	cursor: pointer;
+	background-color: ${({bgColor}) => bgColor};
+	color: ${({textColor}) => textColor};
+
+	&:focus,
+	&:hover {
+		background-color: ${({bgColor}) => bgColor};
+		color: ${({textColor}) => textColor};
+	}
+`;
+
 const InputCardNumber = styled(Input)`
 	width: 185px;
 `;
@@ -119,7 +137,7 @@ class CardCreate extends Component {
 				this.props.onCreated(newCard);
 				this.setState({isView: false});
 			})
-			.catch(this.setState({error: true}));
+			.catch((error) => {if(error) this.setState({error: true});});
 	}
 
 	onChangeInputValue(event) {
@@ -169,7 +187,7 @@ class CardCreate extends Component {
 		return (
 			<ErrorLayout>
 				<ErrorCardTitle>Данные карты не верны</ErrorCardTitle>
-				<CreateButton bgColor='#fff' textColor='#108051'>OK</CreateButton>
+				<ErrorButton onClick={() => this.setState({error: false})} >Повторить</ErrorButton>
 			</ErrorLayout>
 		);
 	}
