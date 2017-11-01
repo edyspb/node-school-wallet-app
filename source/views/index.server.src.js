@@ -1,11 +1,14 @@
 import React from 'react';
 import {renderToString} from 'react-dom/server';
 import {extractCritical} from 'emotion-server';
+import {StaticRouter} from 'react-router-dom';
 import serialize from 'serialize-javascript';
-import {App} from '../client/components';
+import {Routes} from '../client/components';
 
-module.exports = (appData) => {
-	const app = renderToString(<App data={appData} />);
+module.exports = (url, appData) => {
+	const app = renderToString(<StaticRouter location={url} context={{}}>
+		<Routes appData={appData} />
+	</StaticRouter>);
 	const {html, ids, css} = extractCritical(app);
 	const viewData = `window.__data=${serialize({ids, appData})};`;
 

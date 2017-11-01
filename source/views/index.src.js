@@ -1,9 +1,14 @@
 import React from 'react';
+import {BrowserRouter as Router} from 'react-router-dom';
 import {hydrate as reactHydrate} from 'react-dom';
 import {hydrate as emotionHydrate} from 'emotion';
-import {App} from '../client/components';
+import {Routes} from '../client/components';
 
 const {ids, appData} = window.__data;
 
 emotionHydrate(ids);
-reactHydrate(<App data={appData} />, document.getElementById('root'));
+
+const Routing = (<Router>
+	<Routes appData={appData} />
+</Router>);
+reactHydrate(Routing, document.getElementById('root'));

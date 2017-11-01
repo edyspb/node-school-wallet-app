@@ -14,3 +14,6 @@ export {default as History} from './History';
 export {default as Header} from './Header';
 export {default as UserInfo} from './UserInfo';
 export {default as App} from './App';
+export {default as Landing} from './Landing';
+export {default as Routes} from './Routes';
+
