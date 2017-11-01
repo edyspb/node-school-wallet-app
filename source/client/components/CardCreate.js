@@ -34,10 +34,20 @@ const CreateCardLayout = styled.div`
 	border: 2px dashed rgba(255, 255, 255, 0.2);
 `;
 
+const ErrorLayout = styled(CreateCardLayout)`
+	background-color: red;
+	border: none;
+	text-align: center;
+`;
+
 const CreateCardTitle = styled(Title)`
 	font-size: 20px;
 	margin-bottom: 5px;
 	color: #fff;
+`;
+
+const ErrorCardTitle = styled(CreateCardTitle)`
+	font-size: 32px;
 `;
 
 const InputField = styled.div`
@@ -83,6 +93,7 @@ class CardCreate extends Component {
 		super(props);
 		this.state = {
 			isView: false,
+			error: false,
 			cardNumber: '',
 			balance: ''
 		};
@@ -108,7 +119,7 @@ class CardCreate extends Component {
 				this.props.onCreated(newCard);
 				this.setState({isView: false});
 			})
-			.catch((error) => console.log(error));
+			.catch(this.setState({error: true}));
 	}
 
 	onChangeInputValue(event) {
@@ -124,34 +135,42 @@ class CardCreate extends Component {
 	}
 
 	render() {
-		const {isView} = this.state;
-		if (!isView) {
+		const {error, isView} = this.state;
+		if (!error) {
+			if (!isView) {
+				return (
+					<NewCardLayout onClick={() => this.onClick()}/>
+				);
+			}
 			return (
-				<NewCardLayout onClick={() => this.onClick()} />
+				<CreateCardLayout>
+					<form onSubmit={(event) => this.onSubmitForm(event)}>
+						<CreateCardTitle>Введите данные карты</CreateCardTitle>
+						<InputField>
+							<Label>Номер</Label>
+							<InputCardNumber
+								name='cardNumber'
+								value={this.state.cardNumber}
+								onChange={(event) => this.onChangeInputValue(event)}/>
+						</InputField>
+						<InputField>
+							<Label>Баланс</Label>
+							<InputSum
+								name='balance'
+								value={this.state.balance}
+								onChange={(event) => this.onChangeInputValue(event)}/>
+							<Currency>₽</Currency>
+						</InputField>
+						<CreateButton bgColor='#fff' textColor='#108051'>Создать</CreateButton>
+					</form>
+				</CreateCardLayout>
 			);
 		}
 		return (
-			<CreateCardLayout>
-				<form onSubmit={(event) => this.onSubmitForm(event)}>
-					<CreateCardTitle>Введите данные карты</CreateCardTitle>
-					<InputField>
-						<Label>Номер</Label>
-						<InputCardNumber
-							name='cardNumber'
-							value={this.state.cardNumber}
-							onChange={(event) => this.onChangeInputValue(event)} />
-					</InputField>
-					<InputField>
-						<Label>Баланс</Label>
-						<InputSum
-							name='balance'
-							value={this.state.balance}
-							onChange={(event) => this.onChangeInputValue(event)} />
-						<Currency>₽</Currency>
-					</InputField>
-					<CreateButton bgColor='#fff' textColor='#108051'>Создать</CreateButton>
-				</form>
-			</CreateCardLayout>
+			<ErrorLayout>
+				<ErrorCardTitle>Данные карты не верны</ErrorCardTitle>
+				<CreateButton bgColor='#fff' textColor='#108051'>OK</CreateButton>
+			</ErrorLayout>
 		);
 	}
 }
