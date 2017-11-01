@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'emotion/react';
-import {Select, CardEdit} from './';
+import {Select, CardEdit, CardCreate} from './';
 
 const CardLayout = styled.div`
 	position: relative;
@@ -39,15 +39,6 @@ const CardType = styled.div`
 	opacity: ${({active}) => (active ? '1' : '0.6')};
 `;
 
-
-const NewCardLayout = styled(CardLayout)`
-	background-color: ${({color}) => color};
-	background-image: url('/assets/cards-add.svg');
-	background-repeat: no-repeat;
-	background-position: center;
-	box-sizing: border-box;
-	border: 2px dashed rgba(255, 255, 255, 0.2);
-`;
 
 const CardSelect = styled(Select)`
 	width: 100%;
@@ -90,8 +81,7 @@ class Card extends Component {
 		const {data, type, active, isSingle, onClick, isCardsEditable, onChangeBarMode} = this.props;
 		if (type === 'new') {
 			return (
-				<NewCardLayout color={'transparent'} onClick={() => console.log(this.props)
-				} />
+				<CardCreate />
 			);
 		}
 
