@@ -45,6 +45,24 @@ const CardSelect = styled(Select)`
 	margin-bottom: 15px;
 `;
 
+
+const Delete = styled.div`
+	display: ${({active}) => (active ? 'block' : 'none')};
+	position: absolute;
+	top: 17px;
+	right: 12px;
+	width: 34px;
+	height: 35px;
+	cursor: pointer;
+	background-repeat: no-repeat;
+	background-position: center center;
+	
+	&:hover {
+	background-image: url('/assets/cards-delete.svg');
+	}	
+`;
+
+
 /**
  * Карта
  */
@@ -70,6 +88,7 @@ class Card extends Component {
 	onCardChange(activeCardIndex) {
 		this.setState({activeCardIndex});
 	}
+
 
 	/**
 	 * Рендер компонента
@@ -122,6 +141,7 @@ class Card extends Component {
 					{number}
 				</CardNumber>
 				<CardType url={themedBrandLogoUrl} active={active} />
+				<Delete active={active} onClick={() => this.props.onDeleted()} />
 			</CardLayout>
 		);
 	}
@@ -135,7 +155,8 @@ Card.propTypes = {
 	isCardsEditable: PropTypes.bool,
 	onClick: PropTypes.func,
 	onChangeBarMode: PropTypes.func,
-	onCreated: PropTypes.func
+	onCreated: PropTypes.func,
+	onDeleted: PropTypes.func
 };
 
 export default Card;

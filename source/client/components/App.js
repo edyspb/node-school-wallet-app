@@ -164,7 +164,11 @@ class App extends Component {
 			.then(() => {
 				axios.get('/cards').then(({data}) => {
 					const cardsList = App.prepareCardsData(data);
-					this.setState({cardsList});
+					this.setState({
+						cardsList,
+						activeCardIndex: 0,
+						isCardRemoving: false
+					});
 				});
 			});
 	}
@@ -176,6 +180,20 @@ class App extends Component {
 		const cardHistory = App.prepareHistory(cardsList, []);
 		this.setState({cardsList, cardHistory});
 	}
+
+	onDeleted() {
+		const {cardsList, activeCardIndex} = this.state;
+		this.setState({
+			removeCardId: cardsList[activeCardIndex].id,
+			isCardRemoving: true
+		});
+	}
+
+	onCancelClick() {
+		this.setState({isCardRemoving: false});
+	}
+
+
 	/**
 	 * Рендер компонента
 	 *
@@ -202,7 +220,9 @@ class App extends Component {
 					isCardRemoving={isCardRemoving}
 					deleteCard={(index) => this.deleteCard(index)}
 					onChangeBarMode={(event, index) => this.onChangeBarMode(event, index)}
-					onCreated={(newCard) => this.onCreated(newCard)} />
+					onCreated={(newCard) => this.onCreated(newCard)}
+					onDeleted={() => this.onDeleted()}
+					onCancelClick={() => this.onCancelClick()} />
 				<CardPane>
 					<Header activeCard={activeCard} />
 					<Workspace>
