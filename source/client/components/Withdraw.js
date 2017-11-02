@@ -87,7 +87,7 @@ class Withdraw extends Component {
 
 		const options = {
 			method: 'post',
-			url: `/cards/${activeCard.id}/transfer`,
+			url: `api/v1/cards/${activeCard.id}/transfer`,
 			data: {
 				target: selectedCard.id,
 				sum

@@ -130,11 +130,11 @@ class App extends Component {
 	* Функция вызывает при успешной транзакции
 	*/
 	onTransaction() {
-		axios.get('/cards').then(({data}) => {
+		axios.get('api/v1/cards').then(({data}) => {
 			const cardsList = App.prepareCardsData(data);
 			this.setState({cardsList});
 
-			axios.get('/transactions').then(({data}) => {
+			axios.get('api/v1/transactions').then(({data}) => {
 				const cardHistory = App.prepareHistory(cardsList, data);
 				this.setState({cardHistory});
 			});
@@ -160,9 +160,9 @@ class App extends Component {
 	 */
 	deleteCard(id) {
 		axios
-			.delete(`/cards/${id}`)
+			.delete(`/api/cards/${id}`)
 			.then(() => {
-				axios.get('/cards').then(({data}) => {
+				axios.get('api/v1/cards').then(({data}) => {
 					const cardsList = App.prepareCardsData(data);
 					this.setState({
 						cardsList,
