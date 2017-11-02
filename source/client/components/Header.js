@@ -34,11 +34,11 @@ const Report = styled.a`
 
 function onReport(activeCard) {
 	axios
-		.get(`/report/${activeCard.id}`)
+		.get(`/api/v1/report/${activeCard.id}`)
 		.then((response) => {
 			const link = document.createElement("a");
 			link.download = 'reportFile';
-			link.href = `/report/${activeCard.id}`;
+			link.href = `/api/v1/report/${activeCard.id}`;
 			link.click();
 		})
 		.catch((error) => {if(error) console.log('error', error)});
