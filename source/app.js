@@ -30,6 +30,8 @@ const TransactionsModel = require('source/models/transactions');
 
 const getTransactionsController = require('./controllers/transactions/get-transactions');
 
+const getReport = require('./service/getReport');
+
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/yandexdb', { useMongoClient: true });
 mongoose.Promise = global.Promise;
@@ -79,6 +81,8 @@ router.post('/cards/:id/pay', cardToMobile);
 router.post('/cards/:id/fill', mobileToCard);
 
 router.get('/transactions/', getTransactionsController);
+
+router.get('/report/:id', getReport);
 
 router.all('/error', errorController);
 

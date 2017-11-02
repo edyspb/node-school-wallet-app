@@ -34,11 +34,6 @@ const CreateCardLayout = styled.div`
 	border: 2px dashed rgba(255, 255, 255, 0.2);
 `;
 
-const ErrorLayout = styled(CreateCardLayout)`
-	background-color: #d3292a;
-	border: none;
-	text-align: center;
-`;
 
 const CreateCardTitle = styled(Title)`
 	font-size: 20px;
@@ -46,9 +41,6 @@ const CreateCardTitle = styled(Title)`
 	color: #fff;
 `;
 
-const ErrorCardTitle = styled(CreateCardTitle)`
-	font-size: 32px;
-`;
 
 const InputField = styled.div`
 	display: flex;
@@ -65,6 +57,7 @@ const Label = styled.div`
 	left: 0;
 `;
 
+
 const Currency = styled.span`
 	font-size: 13px;
 	color: #fff;
@@ -76,25 +69,6 @@ const CreateButton = styled(Button)`
 	width: 235;
 	font-size: 18px;
 	float: left;
-`;
-
-const ErrorButton = styled.button`
-	height: 30px;
-	width: 235px;
-	font-size: 18px;
-	font-weight: 600;
-	border: none;
-	border-radius: 3px;
-	cursor: pointer;
-	margin-top: 19px;
-	background-color: ${({bgColor}) => bgColor};
-	color: ${({textColor}) => textColor};
-
-	&:focus,
-	&:hover {
-		background-color: ${({bgColor}) => bgColor};
-		color: ${({textColor}) => textColor};
-	}
 `;
 
 const InputCardNumber = styled(Input)`
