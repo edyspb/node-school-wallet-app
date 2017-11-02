@@ -24,7 +24,7 @@ const BalanceSum = styled.span`
 	font-weight: bold;
 `;
 
-const Report = styled.span`
+const Report = styled.a`
 	margin: 0;
 	cursor: pointer;
 	font-size: 24px;
@@ -36,7 +36,10 @@ function onReport(activeCard) {
 	axios
 		.get(`/report/${activeCard.id}`)
 		.then((response) => {
-			console.log('true', response);
+			const link = document.createElement("a");
+			link.download = 'reportFile';
+			link.href = `/report/${activeCard.id}`;
+			link.click();
 		})
 		.catch((error) => {if(error) console.log('error', error)});
 }

@@ -1,22 +1,35 @@
 'use strict';
 
 const fs = require('fs');
-const path = require('path');
 const {promisify} = require('util');
 
 const writeFileAsync = promisify(fs.writeFile);
 
-module.exports = async (ctx, next) => {
+module.exports = async (ctx) => {
+
+	const path = 'source/service/reportFile.txt';
+
 	const cardId = Number(ctx.params.id);
-	const transactions = await ctx.transactionsModel.getByCard(cardId);
+	const cards = await ctx.cardsModel.getAll();
+	let card = cards.filter((card) => {
+		return card.id === cardId;
+	})[0];
 
+	card = {
+		cardNumber: card.cardNumber,
+		balance: card.balance
+	};
 
-	const file = path.join('source/service/reportFile.txt');
-	const redactData = (JSON.stringify(transactions, null, 4));
-	await writeFileAsync(file, redactData);
+	const startTransactions = await ctx.transactionsModel.getByCard(cardId);
+	const transactions = startTransactions.map((transaction) => {
+		const {type, data, sum, time} = transaction;
+		return {type,data, sum, time};
+	});
 
-	ctx.response.download = file;
-	ctx.status = 200;
-	//ctx.body = fs.readFileSync(file);
-	//ctx.contentType = 'file';
+	const req = {card, transactions};
+
+	await writeFileAsync(path, JSON.stringify(req, null, 4));
+
+	ctx.attachment('reportFile.txt');
+	ctx.body = fs.createReadStream('source/service/reportFile.txt');
 };
