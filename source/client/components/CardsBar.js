@@ -30,7 +30,7 @@ const Edit = styled.div`
 	background-position: center center;
 `;
 
-const CardsList = styled.div`
+const CardsList = styled.div`this.state.activeCard.id
 	flex: 1;
 `;
 
@@ -41,7 +41,7 @@ const Footer = styled.footer`
 
 const CardsBar = ({
 	activeCardIndex, cardsList, onCardChange, onEditChange, isCardsEditable, isCardRemoving, onChangeBarMode,
-	removeCardId, deleteCard
+	removeCardId, deleteCard, onCreated, onDeleted, onCancelClick
 }) => {
 	const onCardClick = (index) => {
 		onCardChange && onCardChange(index);
@@ -53,7 +53,8 @@ const CardsBar = ({
 				<Logo />
 				<CardDelete
 					deleteCard={deleteCard}
-					data={cardsList.filter((item) => item.id === removeCardId)[0]} />
+					data={cardsList.filter((item) => item.id === removeCardId)[0]}
+					onCancelClick={() => onCancelClick()} />
 				<Footer>Yamoney Node School</Footer>
 			</Layout>
 		);
@@ -72,10 +73,12 @@ const CardsBar = ({
 							active={index === activeCardIndex}
 							isCardsEditable={isCardsEditable}
 							onChangeBarMode={onChangeBarMode}
-							onClick={() => onCardClick(index)} />
+							onClick={() => onCardClick(index)}
+							onDeleted={() => onDeleted()} >
+						</Card>
 					))
 				}
-				<Card type='new' />
+				<Card type='new' onCreated={(newCard) => onCreated(newCard)} />
 			</CardsList>
 			<Footer>Yamoney Node School</Footer>
 		</Layout>
@@ -90,7 +93,10 @@ CardsBar.propTypes = {
 	isCardsEditable: PropTypes.bool.isRequired,
 	isCardRemoving: PropTypes.bool.isRequired,
 	deleteCard: PropTypes.func.isRequired,
-	onChangeBarMode: PropTypes.func.isRequired
+	onChangeBarMode: PropTypes.func.isRequired,
+	onCreated: PropTypes.func.isRequired,
+	onDeleted: PropTypes.func.isRequired,
+	onCancelClick: PropTypes.func.isRequired
 };
 
 export default CardsBar;

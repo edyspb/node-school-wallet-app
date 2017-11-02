@@ -164,10 +164,35 @@ class App extends Component {
 			.then(() => {
 				axios.get('api/v1/cards').then(({data}) => {
 					const cardsList = App.prepareCardsData(data);
-					this.setState({cardsList});
+					this.setState({
+						cardsList,
+						activeCardIndex: 0,
+						isCardRemoving: false
+					});
 				});
 			});
 	}
+
+	onCreated(newCard) {
+		const cards = this.props.data.cards;
+		cards[cards.length] = newCard;
+		const cardsList = App.prepareCardsData(cards);
+		const cardHistory = App.prepareHistory(cardsList, []);
+		this.setState({cardsList, cardHistory});
+	}
+
+	onDeleted() {
+		const {cardsList, activeCardIndex} = this.state;
+		this.setState({
+			removeCardId: cardsList[activeCardIndex].id,
+			isCardRemoving: true
+		});
+	}
+
+	onCancelClick() {
+		this.setState({isCardRemoving: false});
+	}
+
 
 	/**
 	 * Рендер компонента
@@ -194,7 +219,10 @@ class App extends Component {
 					isCardsEditable={isCardsEditable}
 					isCardRemoving={isCardRemoving}
 					deleteCard={(index) => this.deleteCard(index)}
-					onChangeBarMode={(event, index) => this.onChangeBarMode(event, index)} />
+					onChangeBarMode={(event, index) => this.onChangeBarMode(event, index)}
+					onCreated={(newCard) => this.onCreated(newCard)}
+					onDeleted={() => this.onDeleted()}
+					onCancelClick={() => this.onCancelClick()} />
 				<CardPane>
 					<Header activeCard={activeCard} />
 					<Workspace>

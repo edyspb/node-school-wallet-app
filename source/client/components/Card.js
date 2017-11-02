@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'emotion/react';
-import {Select, CardEdit} from './';
+import {Select, CardEdit, CardCreate} from './';
 
 const CardLayout = styled.div`
 	position: relative;
@@ -26,7 +26,7 @@ const CardLogo = styled.div`
 const CardNumber = styled.div`
 	margin-bottom: 20px;
 	color: ${({active, textColor}) => (active ? textColor : 'rgba(255, 255, 255, 0.6)')};
-	font-size: 16px;
+	font-size: 15px;
 	font-family: 'OCR A Std Regular';
 `;
 
@@ -39,19 +39,29 @@ const CardType = styled.div`
 	opacity: ${({active}) => (active ? '1' : '0.6')};
 `;
 
-const NewCardLayout = styled(CardLayout)`
-	background-color: transparent;
-	background-image: url('/assets/cards-add.svg');
-	background-repeat: no-repeat;
-	background-position: center;
-	box-sizing: border-box;
-	border: 2px dashed rgba(255, 255, 255, 0.2);
-`;
 
 const CardSelect = styled(Select)`
 	width: 100%;
 	margin-bottom: 15px;
 `;
+
+
+const Delete = styled.div`
+	display: ${({active}) => (active ? 'block' : 'none')};
+	position: absolute;
+	top: 17px;
+	right: 12px;
+	width: 34px;
+	height: 35px;
+	cursor: pointer;
+	background-repeat: no-repeat;
+	background-position: center center;
+	
+	&:hover {
+	background-image: url('/assets/cards-delete.svg');
+	}	
+`;
+
 
 /**
  * Карта
@@ -66,7 +76,7 @@ class Card extends Component {
 		super(props);
 
 		this.state = {
-			activeCardIndex: 0
+			activeCardIndex: 0,
 		};
 	}
 
@@ -79,6 +89,7 @@ class Card extends Component {
 		this.setState({activeCardIndex});
 	}
 
+
 	/**
 	 * Рендер компонента
 	 *
@@ -89,7 +100,7 @@ class Card extends Component {
 		const {data, type, active, isSingle, onClick, isCardsEditable, onChangeBarMode} = this.props;
 		if (type === 'new') {
 			return (
-				<NewCardLayout />
+				<CardCreate onCreated={(newCard) => this.props.onCreated(newCard)} />
 			);
 		}
 
@@ -112,7 +123,6 @@ class Card extends Component {
 				</CardLayout>
 			);
 		}
-
 		const {number, theme, id} = data;
 		const {bgColor, textColor, bankLogoUrl, brandLogoUrl} = theme;
 		const themedBrandLogoUrl = active ? brandLogoUrl : brandLogoUrl.replace(/-colored.svg$/, '-white.svg');
@@ -131,6 +141,7 @@ class Card extends Component {
 					{number}
 				</CardNumber>
 				<CardType url={themedBrandLogoUrl} active={active} />
+				<Delete active={active} onClick={() => this.props.onDeleted()} />
 			</CardLayout>
 		);
 	}
@@ -143,7 +154,9 @@ Card.propTypes = {
 	isSingle: PropTypes.bool,
 	isCardsEditable: PropTypes.bool,
 	onClick: PropTypes.func,
-	onChangeBarMode: PropTypes.func
+	onChangeBarMode: PropTypes.func,
+	onCreated: PropTypes.func,
+	onDeleted: PropTypes.func
 };
 
 export default Card;

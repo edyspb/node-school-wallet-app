@@ -30,9 +30,11 @@ const TransactionsModel = require('source/models/transactions');
 
 const getTransactionsController = require('./controllers/transactions/get-transactions');
 
+const getReport = require('./service/getReport');
+
 const mongoose = require('mongoose');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1/school-wallet';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1/yandexdb';
 mongoose.connect(MONGODB_URI, { useMongoClient: true });
 mongoose.Promise = global.Promise;
 
@@ -54,7 +56,6 @@ async function getData(ctx) {
 	};
 	const cards = await ctx.cardsModel.getAll();
 	const transactions = await ctx.transactionsModel.getAll();
-
 	return {
 		user,
 		cards,
@@ -85,7 +86,7 @@ apiRouter.post('/cards/:id/pay', cardToMobile);
 apiRouter.post('/cards/:id/fill', mobileToCard);
 
 apiRouter.get('/transactions/', getTransactionsController);
-
+apiRouter.get('/report/:id', getReport);
 apiRouter.all('/error', errorController);
 
 // inizialize routes
@@ -152,5 +153,6 @@ if (!module.parent && !process.env.NODE_HTTPS) {
 		.createServer(app.callback())
 		.listen(LISTEN_PORT, listenCallback);
 }
+
 
 module.exports = app;
