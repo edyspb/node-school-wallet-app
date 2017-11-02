@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { NavLink } from 'react-router-dom';
 import styled from 'emotion/react';
 import {Title, Island, Button} from './';
 
@@ -56,7 +57,9 @@ const Landing = ({children, className}) => (
         <Jumbotron >
         <JumbotronTitle>"Кошелек" - приложение для управления личными финансами</JumbotronTitle>
            <JumbotronText> Для входа в личный кабинет, пожалуйста, авторизуйтесь</JumbotronText>
-           <Button bgColor="#3897f0" textColor="#fff">Войти через Yandex</Button>
+           <NavLink to="/workspace">
+             <Button bgColor="#3897f0" textColor="#fff">Войти через Yandex</Button>
+           </NavLink>
         </Jumbotron>
     </LandingLayout>    
 );
