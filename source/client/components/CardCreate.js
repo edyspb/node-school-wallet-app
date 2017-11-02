@@ -131,6 +131,14 @@ class CardCreate extends Component {
 
 		const {cardNumber,  balance} = this.state;
 
+		const preValid = !isNaN(parseFloat(cardNumber)) && isFinite(cardNumber) &&
+			!isNaN(parseFloat(balance)) && isFinite(balance);
+
+		if(!preValid) {
+			this.setState({error: true});
+			return;
+		}
+
 		axios
 			.post('/cards/', {cardNumber, balance})
 			.then((response) => {
