@@ -6,7 +6,7 @@ const https = require('https');
 const path = require('path');
 const Koa = require('koa');
 const serve = require('koa-static');
-const router = require('koa-router')();
+const getRouter = require('koa-router');
 const bodyParser = require('koa-bodyparser')();
 
 const logger = require('libs/logger')('app');
@@ -37,6 +37,9 @@ mongoose.connect(MONGODB_URI, { useMongoClient: true });
 mongoose.Promise = global.Promise;
 
 const app = new Koa();
+const appRouter = getRouter();
+const clientRouter = getRouter();
+const apiRouter = getRouter();
 
 function getView(viewId) {
 	const viewPath = path.resolve(__dirname, 'views', `${viewId}.server.js`);
@@ -60,30 +63,35 @@ async function getData(ctx) {
 }
 
 // Сохраним параметр id в ctx.params.id
-router.param('id', (id, ctx, next) => next());
+clientRouter.param('id', (id, ctx, next) => next());
 
-router.get('/', async (ctx) => {
+clientRouter.all('client', '*', async (ctx) => {
 	const data = await getData(ctx);
 	const indexView = getView('index');
-	const indexViewHtml = renderToStaticMarkup(indexView(data));
+	const indexViewHtml = renderToStaticMarkup(indexView(ctx.originalUrl, data));
 
 	ctx.body = indexViewHtml;
 });
 
-router.get('/cards/', getCardsController);
-router.post('/cards/', createCardController);
-router.delete('/cards/:id', deleteCardController);
+apiRouter.get('/cards/', getCardsController);
+apiRouter.post('/cards/', createCardController);
+apiRouter.delete('/cards/:id', deleteCardController);
 
-router.get('/cards/:id/transactions/', getTransactionController);
-router.post('/cards/:id/transactions/', createTransactionsController);
+apiRouter.get('/cards/:id/transactions/', getTransactionController);
+apiRouter.post('/cards/:id/transactions/', createTransactionsController);
 
-router.post('/cards/:id/transfer', cardToCard);
-router.post('/cards/:id/pay', cardToMobile);
-router.post('/cards/:id/fill', mobileToCard);
+apiRouter.post('/cards/:id/transfer', cardToCard);
+apiRouter.post('/cards/:id/pay', cardToMobile);
+apiRouter.post('/cards/:id/fill', mobileToCard);
 
-router.get('/transactions/', getTransactionsController);
+apiRouter.get('/transactions/', getTransactionsController);
 
-router.all('/error', errorController);
+apiRouter.all('/error', errorController);
+
+// inizialize routes
+appRouter.use('/api/v1', apiRouter.routes());
+appRouter.use('/', clientRouter.routes());
+
 
 // logger
 app.use(async (ctx, next) => {
@@ -114,8 +122,9 @@ app.use(async (ctx, next) => {
 
 
 app.use(bodyParser);
-app.use(router.routes());
 app.use(serve('./public'));
+app.use(appRouter.routes());
+
 
 const listenCallback = function() {
 	const {
