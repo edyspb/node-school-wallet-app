@@ -1,15 +1,18 @@
 version: '2'
 services:
-  web:
-    build: .
+  wallet:
+    image: "node-school-app"
     ports:
-      - "${PORT}:3000"
+      - "80:3000"
     depends_on:
       - mongo
     links:
       - "mongo:mongo"
-    command: "/app/docker_start.sh"
+    environment:
+      MONGODB_URI: "mongodb://mongo/school-wallet"
   mongo:
     image: "mongo:latest"
     ports:
       - "27017:27017"
+    volumes:
+      - "/ci/db:/data/db"
