@@ -1,6 +1,4 @@
-FROM node:8.8
-
-RUN apt-get update && apt-get install -y mongodb-clients
+FROM node:8.9-alpine
 
 ADD ./ /app
 WORKDIR /app

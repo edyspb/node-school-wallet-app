@@ -125,7 +125,6 @@ const listenCallback = function() {
 	logger.info(`Application started on ${port}`);
 };
 
-// process.env.PORT lets the port be set by Heroku
 const LISTEN_PORT = process.env.PORT || 3000;
 
 if (!module.parent && process.env.NODE_HTTPS) {
