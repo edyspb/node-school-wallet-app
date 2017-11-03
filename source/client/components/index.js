@@ -17,3 +17,4 @@ export {default as App} from './App';
 export {default as Landing} from './Landing';
 export {default as Routes} from './Routes';
 export {default as CardCreate} from './CardCreate';
+export {default as Report} from './Report';

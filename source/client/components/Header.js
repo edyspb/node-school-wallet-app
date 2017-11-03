@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'emotion/react';
-import {Title, UserInfo} from './';
-import axios from 'axios';
+import {Title, UserInfo, Report} from './';
 
 
 const HeaderLayout = styled.header`
@@ -24,25 +23,6 @@ const BalanceSum = styled.span`
 	font-weight: bold;
 `;
 
-const Report = styled.a`
-	margin: 0;
-	cursor: pointer;
-	font-size: 24px;
-	font-weight: 600;
-	color: #000;
-`;
-
-function onReport(activeCard) {
-	axios
-		.get(`/api/v1/report/${activeCard.id}`)
-		.then((response) => {
-			const link = document.createElement("a");
-			link.download = 'reportFile';
-			link.href = `/api/v1/report/${activeCard.id}`;
-			link.click();
-		})
-		.catch((error) => {if(error) console.log('error', error)});
-}
 
 const Header = ({activeCard, user}) => (
 	<HeaderLayout>
@@ -50,10 +30,9 @@ const Header = ({activeCard, user}) => (
 			{`${activeCard.bankName}: `}
 			<BalanceSum>{`${activeCard.balance} ₽`}</BalanceSum>
 		</Balance>
-		<Report onClick={() => onReport(activeCard)}>Запросить отчет</Report>
+		<Report activeCard={activeCard} />
 		<UserInfo user={user} />
-	</HeaderLayout>
-);
+	</HeaderLayout>);
 
 Header.propTypes = {
 	activeCard: PropTypes.shape({
