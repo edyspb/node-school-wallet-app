@@ -2,13 +2,16 @@ import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'emotion/react';
 
-const MenuHeader = styled.span`
+const MenuHeader = styled.div`
 	text-align: center;
-	height: 40px;
 	cursor: pointer;
 	font-size: 24px;
-	font-weight: 600;
-	color: #000;
+	color: #fff;
+	position: absolute;
+	width: 95px;
+	margin-top: -3px;
+	margin-left: 165px;
+	z-index: 1;
 `;
 
 const LinkReport = styled.a`
@@ -56,14 +59,14 @@ class Report extends Component {
 						href={`/api/v1/report/${activeCard.id}/${item}`}
 						download='reportFile'
 						bgColor='#018ca5'>
-						В формате {item}
+						{item}
 					</LinkReport>
 				))}
 			</Menu>
 		}
 		return (
 			<MenuHeader onClick={() => this.toggleItems()}>
-				Запросить отчет
+				ОТЧЕТ
 				{menuItems}
 			</MenuHeader>
 		);

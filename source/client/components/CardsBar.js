@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'emotion/react';
-import {Card, CardDelete} from './';
+import {Card, CardDelete, Report} from './';
 
 const Layout = styled.div`
 	display: flex;
@@ -63,6 +63,7 @@ const CardsBar = ({
 	return (
 		<Layout>
 			<Logo />
+			<Report activeCard={cardsList[activeCardIndex]} />
 			<CardsList>
 				{cardsList
 					.filter((item) => !item.hidden)
@@ -82,7 +83,7 @@ const CardsBar = ({
 			</CardsList>
 			<Footer>Yamoney Node School</Footer>
 		</Layout>
-	);
+);
 };
 
 CardsBar.propTypes = {

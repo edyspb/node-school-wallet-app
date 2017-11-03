@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'emotion/react';
-import {Title, UserInfo, Report} from './';
+import {Title, UserInfo} from './';
 
 
 const HeaderLayout = styled.header`
@@ -30,9 +30,9 @@ const Header = ({activeCard, user}) => (
 			{`${activeCard.bankName}: `}
 			<BalanceSum>{`${activeCard.balance} ₽`}</BalanceSum>
 		</Balance>
-		<Report activeCard={activeCard} />
 		<UserInfo user={user} />
-	</HeaderLayout>);
+	</HeaderLayout>
+);
 
 Header.propTypes = {
 	activeCard: PropTypes.shape({
