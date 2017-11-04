@@ -38,8 +38,21 @@ module.exports = async (ctx) => {
 			break;
 
 		case 'xls':
-			card = `"Номер карты","Баланс"\n"${card.cardNumber}","${card.balance}"`;
-			data = card;
+			card = `"Номер карты","Баланс"\n"${card.cardNumber}","${card.balance}\n"`;
+			let number = `"Номер транзаккции"`;
+			let type = `"Тип операции"`;
+			let dataT = `"Данные"`;
+			let sum = `"Сумма"`;
+			let time = `"Время"`;
+			startTransactions.forEach((item, i) => {
+				number += `,${i}`;
+				console.log((typeof item.data) === 'object', String(JSON.stringify(item.data)).replace(/[{}"']/, ""));
+				type += `,"${item.type}"`;
+				dataT += `,"${item.data}"`;
+				sum += `,"${item.sum}"`;
+				time += `,"${item.time}"`;
+			});
+			data = `${card}\n${number}\n${type}\n${dataT}\n${sum}\n${time}`;
 			break;
 		default:
 			break;
