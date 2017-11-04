@@ -160,7 +160,7 @@ class App extends Component {
 	 */
 	deleteCard(id) {
 		axios
-			.delete(`/api/cards/${id}`)
+			.delete(`/api/v1/cards/${id}`)
 			.then(() => {
 				axios.get('api/v1/cards').then(({data}) => {
 					const cardsList = App.prepareCardsData(data);

@@ -114,7 +114,7 @@ class CardCreate extends Component {
 		}
 
 		axios
-			.post('/cards/', {cardNumber, balance})
+			.post('/api/v1/cards/', {cardNumber, balance})
 			.then((response) => {
 				const newCard = response.data;
 				newCard.cardNumber = Number(newCard.cardNumber);
