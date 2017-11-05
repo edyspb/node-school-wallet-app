@@ -150,7 +150,7 @@ class MobilePaymentContract extends Component {
 
 		return (
 			<MobilePaymentLayout>
-				<form onSubmit={(event) => this.onSubmitForm(event)}>
+				<form data-test-id={'mobile-payment-contract-form'} onSubmit={(event) => this.onSubmitForm(event)}>
 					<MobilePaymentTitle>Пополнить телефон</MobilePaymentTitle>
 					<InputField>
 						<Label>Телефон</Label>
@@ -162,6 +162,7 @@ class MobilePaymentContract extends Component {
 					<InputField>
 						<Label>Сумма</Label>
 						<InputSum
+							data-test-id={'mobile-payment-contract-input'}
 							name='sum'
 							value={this.state.sum}
 							onChange={(event) => this.onChangeInputValue(event)} />

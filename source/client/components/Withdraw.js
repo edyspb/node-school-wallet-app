@@ -108,12 +108,13 @@ class Withdraw extends Component {
 		const {inactiveCardsList} = this.props;
 
 		return (
-			<form onSubmit={(event) => this.onSubmitForm(event)}>
+			<form data-test-id={'withdraw-form'} onSubmit={(event) => this.onSubmitForm(event)}>
 				<WithdrawLayout>
 					<WithdrawTitle>Вывести деньги на карту</WithdrawTitle>
 					<Card type='select' data={inactiveCardsList} />
 					<InputField>
 						<SumInput
+							data-test-id={'withdraw-input'}
 							name='sum'
 							value={this.state.sum}
 							onChange={(event) => this.onChangeInputValue(event)} />
