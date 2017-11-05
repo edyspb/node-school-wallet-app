@@ -111,7 +111,7 @@ class Card extends Component {
 			const isActive = true;
 
 			return (
-				<CardLayout active={true} bgColor={bgColor} isCardsEditable={isCardsEditable} isSingle={isSingle}>
+				<CardLayout data-test-id={'card-' + data.id} active={true} bgColor={bgColor} isCardsEditable={isCardsEditable} isSingle={isSingle}>
 					<CardEdit editable={isCardsEditable} id={data.id} onChangeBarMode={onChangeBarMode} />
 					<CardLogo url={bankLogoUrl} active={true} />
 					<CardSelect defaultValue='0' onChange={(index) => this.onCardChange(index)}>
@@ -129,6 +129,7 @@ class Card extends Component {
 
 		return (
 			<CardLayout
+				data-test-id={'card-' + data.id}
 				active={active}
 				bgColor={bgColor}
 				onClick={onClick}

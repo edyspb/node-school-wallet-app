@@ -141,11 +141,11 @@ class CardCreate extends Component {
 		const {isView, error} = this.state;
 		if (!isView) {
 			return (
-				<NewCardLayout onClick={() => this.onClick()}/>
+				<NewCardLayout data-test-id={'card-0'} onClick={() => this.onClick()}/>
 			);
 		}
 		return (
-			<CreateCardLayout>
+			<CreateCardLayout data-test-id={'card-0'}>
 				<form onSubmit={(event) => this.onSubmitForm(event)}>
 					<CreateCardTitle>{error ? 'Данные не верны' : 'Введите данные карты'}</CreateCardTitle>
 					<InputField>
