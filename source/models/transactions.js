@@ -29,8 +29,8 @@ class Transactions extends DbModel {
 	 * @param {Number} cardId Идентификатор карты
 	 * @return {Promise.<Object[]>}
 	 */
-	async getByCard(cardId) {
-		const item = await this.getByAll({cardId});
+	async getByCard(cardId, userId) {
+		const item = await this.getByAll({cardId, userId});
 		return item;
 	}
 

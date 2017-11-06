@@ -7,13 +7,10 @@ module.exports = async (ctx) => {
         isAuthenticated: false,
     };
     
-    let accessToken;
+    let { accessToken } = ctx.header;
 
-    if (ctx.request.method === 'GET') {
+    if (accessToken === undefined) {
         accessToken = ctx.cookies.get('accessToken');
-    } else {
-        const authData = ctx.request.body;
-        accessToken = authData.accessToken;
     }
 
     if (accessToken === undefined) {
@@ -26,7 +23,6 @@ module.exports = async (ctx) => {
      { headers: { Authorization: `OAuth ${accessToken}`}}).then((answer) => {
          userBio = answer.data;
 	 }).catch((err) => {
-	 	console.log('11111111err');
 	 });
     
 	 if (userBio === undefined) {

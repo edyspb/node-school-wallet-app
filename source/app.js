@@ -52,6 +52,7 @@ const app = new Koa();
 const appRouter = getRouter();
 const clientRouter = getRouter();
 const apiRouter = getRouter();
+const authRouter = getRouter();
 
 function getView(viewId) {
 	const viewPath = path.resolve(__dirname, 'views', `${viewId}.server.js`);
@@ -100,8 +101,8 @@ apiRouter.post('/cards/:id/fill', mobileToCard);
 
 apiRouter.get('/transactions/', getTransactionsController);
 apiRouter.get('/report/:id', getReport);
-apiRouter.get('/auth', async (ctx) => {
-	const codeForToken = ctx.originalUrl.replace('/api/v1/auth?code=', '');
+authRouter.get('/auth', async (ctx) => {
+	const codeForToken = ctx.originalUrl.replace('/api/yandex/auth?code=', '');
 
 	let accessToken;
 
@@ -113,7 +114,6 @@ apiRouter.get('/auth', async (ctx) => {
 		client_id: yandexOAuth.client_id,
 	})).then((answer) => {
 		accessToken = answer.data.access_token;
-		console.log('access_token', accessToken);
 	}).catch((err) => {
 		console.log('err', err);
 	});
@@ -141,7 +141,19 @@ apiRouter.post('/isAuthenticated', isAuthenticated);
 apiRouter.all('/error', errorController);
 
 // inizialize routes
-appRouter.use('/api/v1', apiRouter.routes());
+appRouter.use('/api/yandex', authRouter.routes());
+
+appRouter.use('/api/v1', async (ctx, next) => {
+	const authData = await isAuthenticated(ctx);
+	if (!authData.isAuthenticated) {
+		ctx.status = 403;
+		ctx.body = 'Access denied :(';
+	} else {
+		ctx.authData = authData;
+		await next();
+	}
+}, apiRouter.routes());
+
 appRouter.use('/', clientRouter.routes());
 
 

@@ -140,7 +140,9 @@ class App extends Component {
 	*/
 	onTransaction() {
 		const { accessToken } = this.state;
-		axios.get('api/v1/cards', {accessToken}).then(({data}) => {
+
+		
+		axios.get('api/v1/cards', {headers: {AccessToken: accessToken}}).then(({data}) => {
 			const cardsList = App.prepareCardsData(data);
 			this.setState({cardsList});
 
@@ -208,6 +210,7 @@ class App extends Component {
 	 */
 	render() {
 		const { isAuthenticated } = this.props.data;
+		const { singOut } = this.props;
 		const {cardsList, activeCardIndex, cardHistory, isCardsEditable, isCardRemoving, removeCardId, user} = this.state;
 		const activeCard = cardsList[activeCardIndex];
 
@@ -236,7 +239,7 @@ class App extends Component {
 					onDeleted={() => this.onDeleted()}
 					onCancelClick={() => this.onCancelClick()} />
 				 <CardPane>
-					<Header activeCard={activeCard} user={user} />
+					<Header activeCard={activeCard} user={user} singOut={singOut} />
 					{ activeCard ?
 					<Workspace>
 						 <History cardHistory={filteredHistory} /> 

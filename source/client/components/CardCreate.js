@@ -114,16 +114,11 @@ class CardCreate extends Component {
 		// 	this.setState({error: true});
 		// 	return;
 		// }
-		console.log('onSubmitForm',2);
-		
 		axios
-			.post('api/v1/cards/', {cardNumber, balance, userId: 558183568})
+			.post('api/v1/cards/', {cardNumber, balance })
 			.then((response) => {
-				// const newCard = response.data;
-				// newCard.cardNumber = Number(newCard.cardNumber);
-				// newCard.balance = Number(newCard.balance);
+				console.log('карта создана');
 				this.props.onCreated();
-				// this.setState({isView: false, error: false});
 			})
 			.catch((error) => { if(error) {
 				console.log('error on create', error);

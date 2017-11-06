@@ -4,6 +4,7 @@ const commission = 3;
 
 module.exports = async (ctx) => {
 	const cardId = ctx.params.id;
+	const userId = ctx.authData.user.id;
 
 	const operation = ctx.request.body;
 	const {sum, phoneNumber} = operation;
@@ -15,7 +16,8 @@ module.exports = async (ctx) => {
 		type: 'withdrawCard',
 		data: {phoneNumber},
 		time: new Date().toISOString(),
-		sum
+		sum,
+		userId,
 	});
 
 	ctx.status = 200;

@@ -1,9 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'emotion/react';
-import {Title, UserInfo} from './';
+import {Title, UserInfo, Button} from './';
 import axios from 'axios';
 
+
+const StyledButton = styled.button`
+height: 36px;
+width: 120px;
+font-size: 13px;
+font-weight: 600;
+border: none;
+border-radius: 3px;
+cursor: pointer;
+background-color: ${({bgColor}) => bgColor};
+color: ${({textColor}) => textColor};
+
+&:focus,
+&:hover {
+	background-color: ${({bgColor}) => bgColor};
+	color: ${({textColor}) => textColor};
+}
+`;
 
 const HeaderLayout = styled.header`
 	display: flex;
@@ -44,7 +62,7 @@ function onReport(activeCard) {
 		.catch((error) => {if(error) console.log('error', error)});
 }
 
-const Header = ({activeCard, user}) => (
+const Header = ({activeCard, user, singOut}) => (
 	<HeaderLayout>
 		{ activeCard ? <div><Balance>
 			{`${activeCard.bankName}: `}
@@ -52,6 +70,9 @@ const Header = ({activeCard, user}) => (
 		</Balance>
 		<Report onClick={() => onReport(activeCard)}>Запросить отчет</Report> </div> : <div> Нет доступных карт </div> }
 		<UserInfo user={user} />
+		<StyledButton onClick={singOut}>
+		   Выйти
+		</StyledButton>
 	</HeaderLayout>
 );
 

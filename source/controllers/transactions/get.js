@@ -2,5 +2,6 @@
 
 module.exports = async (ctx) => {
 	const cardId = Number(ctx.params.id);
-	ctx.body = await ctx.transactionsModel.getByCard(cardId);
+	const userId = ctx.authData.user.id;
+	ctx.body = await ctx.transactionsModel.getByCard(cardId, userId);
 };
