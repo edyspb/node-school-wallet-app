@@ -118,6 +118,11 @@ class CardCreate extends Component {
 			.post('api/v1/cards/', {cardNumber, balance })
 			.then((response) => {
 				console.log('карта создана');
+				this.setState({
+					isView: false,
+					cardNumber: '',
+					balance: ''
+				});
 				this.props.onCreated();
 			})
 			.catch((error) => { if(error) {
