@@ -131,9 +131,14 @@ authRouter.get('/auth', async (ctx) => {
 		console.log('err', err);
 	});
 
-	await ctx.usersModel.findOrCreate(userBio);
-	ctx.cookies.set('accessToken', accessToken, {httpOnly: false});
-	ctx.redirect('/workspace');
+
+	if (userBio) {
+		await ctx.usersModel.findOrCreate(userBio);
+		ctx.cookies.set('accessToken', accessToken, {httpOnly: false});
+		ctx.redirect('/workspace');
+	} else {
+		ctx.redirect('/');
+	}
 });
 
 apiRouter.post('/isAuthenticated', isAuthenticated);
