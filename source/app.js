@@ -44,7 +44,7 @@ const yandexOAuth = {
 
 const mongoose = require('mongoose');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/school-wallet';   //'mongodb://127.0.0.1/yandexdb';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1/yandexdb';
 mongoose.connect(MONGODB_URI, { useMongoClient: true });
 mongoose.Promise = global.Promise;
 
