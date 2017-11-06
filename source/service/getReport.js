@@ -1,10 +1,5 @@
 'use strict';
 
-const fs = require('fs');
-const {promisify} = require('util');
-
-const writeFileAsync = promisify(fs.writeFile);
-
 module.exports = async (ctx) => {
 
 	const name = 'reportFile';
@@ -12,6 +7,13 @@ module.exports = async (ctx) => {
 	const cardId = Number(ctx.params.id);
 
 	const startTransactions = await ctx.transactionsModel.getByCard(cardId);
+	startTransactions.forEach((item) => {
+		if ((typeof item.data) === 'object') {
+			for (let key in item.data) {
+				item.data = item.data[key];
+			}
+		}
+	});
 
 	let data;
 	let transactions;
@@ -25,16 +27,16 @@ module.exports = async (ctx) => {
 
 	switch (format) {
 		case 'txt':
-			card = {
-				cardNumber: card.cardNumber,
-				balance: card.balance
-			};
+			card = `Карта: \nНомер карты: ${card.cardNumber}\nБаланс: ${card.balance}`;
+			transactions = 'Транзакции:\n';
 
-			transactions = startTransactions.map((transaction) => {
-				const {type, data, sum, time} = transaction;
-				return {type,data, sum, time};
+			startTransactions.forEach((item, i) => {
+				let {type, data, sum, time} = item;
+				transactions += `\nНомер транзакции: ${i}\nТип операции: ${type}\n` +
+					`Данные: ${data}\nСумма: ${sum}\nВремя: ${time}\n`;
 			});
-			data = JSON.stringify({card, transactions}, null, 4);
+			data = `${card}\n\n${transactions}`;
+			ctx.attachment(`${name}.${format}`);
 			break;
 
 		case 'xls':
@@ -46,19 +48,20 @@ module.exports = async (ctx) => {
 			let time = `"Время"`;
 			startTransactions.forEach((item, i) => {
 				number += `,${i}`;
-				console.log((typeof item.data) === 'object', String(JSON.stringify(item.data)).replace(/[{}"']/, ""));
 				type += `,"${item.type}"`;
 				dataT += `,"${item.data}"`;
 				sum += `,"${item.sum}"`;
 				time += `,"${item.time}"`;
 			});
 			data = `${card}\n${number}\n${type}\n${dataT}\n${sum}\n${time}`;
+			ctx.attachment(`${name}.${format}`);
+			break;
+		case 'screen':
+			data = startTransactions;
 			break;
 		default:
 			break;
 	}
 
-
-	ctx.attachment(`${name}.${format}`);
 	ctx.body = data;
 };

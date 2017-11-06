@@ -10,7 +10,8 @@ import {
 	History,
 	Prepaid,
 	MobilePayment,
-	Withdraw
+	Withdraw,
+	Charts
 } from './';
 
 import './fonts.css';
@@ -101,7 +102,8 @@ class App extends Component {
 			activeCardIndex: 0,
 			removeCardId: 0,
 			isCardRemoving: false,
-			isCardsEditable: false
+			isCardsEditable: false,
+			isCharts: false
 		};
 	}
 
@@ -194,6 +196,7 @@ class App extends Component {
 	}
 
 
+
 	/**
 	 * Рендер компонента
 	 *
@@ -201,14 +204,36 @@ class App extends Component {
 	 * @returns {JSX}
 	 */
 	render() {
-		const {cardsList, activeCardIndex, cardHistory, isCardsEditable, isCardRemoving, removeCardId} = this.state;
+		const {cardsList, activeCardIndex, cardHistory, isCardsEditable, isCardRemoving, removeCardId, isCharts} = this.state;
 		const activeCard = cardsList[activeCardIndex];
 
 		const inactiveCardsList = cardsList.filter((card, index) => (index === activeCardIndex ? false : card));
 		const filteredHistory = cardHistory.filter((data) => {
 			return Number(data.cardId) == activeCard.id;
 		});
-
+		let pane;
+		if (isCharts) {
+			pane = (<Charts cardId={activeCard.id} />);
+		} else {
+			pane = (
+				<CardPane>
+					<Header activeCard={activeCard}/>
+					<Workspace>
+						<History cardHistory={filteredHistory}/>
+						<Prepaid
+							activeCard={activeCard}
+							inactiveCardsList={inactiveCardsList}
+							onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)}
+							onTransaction={() => this.onTransaction()}/>
+						<MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction()}/>
+						<Withdraw
+							activeCard={activeCard}
+							inactiveCardsList={inactiveCardsList}
+							onTransaction={() => this.onTransaction()}/>
+					</Workspace>
+				</CardPane>
+			);
+		}
 		return (
 			<Wallet>
 				<CardsBar
@@ -222,23 +247,9 @@ class App extends Component {
 					onChangeBarMode={(event, index) => this.onChangeBarMode(event, index)}
 					onCreated={(newCard) => this.onCreated(newCard)}
 					onDeleted={() => this.onDeleted()}
-					onCancelClick={() => this.onCancelClick()} />
-				<CardPane>
-					<Header activeCard={activeCard} />
-					<Workspace>
-						<History cardHistory={filteredHistory} />
-						<Prepaid
-							activeCard={activeCard}
-							inactiveCardsList={inactiveCardsList}
-							onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)}
-							onTransaction={() => this.onTransaction()} />
-						<MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction()} />
-						<Withdraw
-							activeCard={activeCard}
-							inactiveCardsList={inactiveCardsList}
-							onTransaction={() => this.onTransaction()} />
-					</Workspace>
-				</CardPane>
+					onCancelClick={() => this.onCancelClick()}
+					onScreen={() => this.setState({isCharts: true})} />
+				{pane}
 			</Wallet>
 		);
 	}

@@ -41,7 +41,7 @@ const Footer = styled.footer`
 
 const CardsBar = ({
 	activeCardIndex, cardsList, onCardChange, onEditChange, isCardsEditable, isCardRemoving, onChangeBarMode,
-	removeCardId, deleteCard, onCreated, onDeleted, onCancelClick
+	removeCardId, deleteCard, onCreated, onDeleted, onCancelClick, onScreen
 }) => {
 	const onCardClick = (index) => {
 		onCardChange && onCardChange(index);
@@ -63,7 +63,7 @@ const CardsBar = ({
 	return (
 		<Layout>
 			<Logo />
-			<Report activeCard={cardsList[activeCardIndex]} />
+			<Report onScreen={() => onScreen()} activeCard={cardsList[activeCardIndex]} />
 			<CardsList>
 				{cardsList
 					.filter((item) => !item.hidden)
@@ -97,7 +97,8 @@ CardsBar.propTypes = {
 	onChangeBarMode: PropTypes.func.isRequired,
 	onCreated: PropTypes.func.isRequired,
 	onDeleted: PropTypes.func.isRequired,
-	onCancelClick: PropTypes.func.isRequired
+	onCancelClick: PropTypes.func.isRequired,
+	onScreen: PropTypes.func.isRequired
 };
 
 export default CardsBar;

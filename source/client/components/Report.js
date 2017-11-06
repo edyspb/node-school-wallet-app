@@ -47,21 +47,34 @@ class Report extends Component {
 	}
 
 	render() {
-		const items = ['txt', 'xls'];
+		const items = ['txt', 'xls', 'screen'];
 		const {isOpened} = this.state;
 		const {activeCard} = this.props;
 		let menuItems;
 		if (isOpened) {
 			menuItems = <Menu>
-				{items.map((item, key) => (
-					<LinkReport
-						key={key}
-						href={`/api/v1/report/${activeCard.id}/${item}`}
-						download='reportFile'
-						bgColor='#018ca5'>
-						{item}
-					</LinkReport>
-				))}
+				{items.map((item, key) => {
+					if (item === 'screen') {
+						return (
+							<LinkReport
+								key={key}
+								onClick={() => this.props.onScreen()}
+								bgColor='#018ca5'>
+								{item}
+							</LinkReport>
+						);
+					} else {
+						return (
+							<LinkReport
+								key={key}
+								href={`/api/v1/report/${activeCard.id}/${item}`}
+								download='reportFile'
+								bgColor='#018ca5'>
+								{item}
+							</LinkReport>
+						);
+					}
+				})}
 			</Menu>
 		}
 		return (
@@ -78,7 +91,8 @@ Report.propTypes = {
 		bankName: PropTypes.string.isRequired,
 		balance: PropTypes.number.isRequired,
 		id: PropTypes.number.isRequired
-	})
+	}),
+	onScreen: PropTypes.func.isRequired
 };
 
 export default Report;
