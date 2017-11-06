@@ -1,9 +1,27 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import styled from 'emotion/react';
-import {Button, Dough} from './';
+import {Button, ChartType, ChartData, ChartDate} from './';
 import axios from 'axios';
 
+const DivButton = styled.div`
+	display: inline-block;
+	width: 200px;
+	height: 50px;
+`;
+
+const BackButton = styled(Button)`
+	width: 200px;
+	height: 50px;
+	font-size: 26px;
+`;
+
+const Handle = styled.div`
+	display: inline-block;
+	font-size: 31px;
+	padding-left: 200px;
+	width: 900px;
+`;
 
 class Charts extends Component {
 	constructor(props) {
@@ -35,10 +53,17 @@ class Charts extends Component {
 		}
 		return (
 			<div>
-				<Button bgColor='#d3292a' textColor='#fff'>Вернуться</Button>
-				<Dough
-					width={300}
-					height={300}
+				<DivButton onClick={() => this.props.onCloseCharts()}>
+					<BackButton bgColor='#d3292a' textColor='#fff'>Вернуться</BackButton>
+				</DivButton>
+				<Handle>Отчет по карте:</Handle>
+				<ChartType
+					transactions={transactions}
+				/>
+				<ChartData
+					transactions={transactions}
+				/>
+				<ChartDate
 					transactions={transactions}
 				/>
 			</div>
@@ -47,7 +72,8 @@ class Charts extends Component {
 }
 
 Charts.propTypes = {
-	cardId: PropTypes.number.isRequired
+	cardId: PropTypes.number.isRequired,
+	onCloseCharts: PropTypes.func.isRequired
 };
 
 export default Charts;

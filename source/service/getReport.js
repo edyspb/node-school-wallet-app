@@ -8,6 +8,20 @@ module.exports = async (ctx) => {
 
 	const startTransactions = await ctx.transactionsModel.getByCard(cardId);
 	startTransactions.forEach((item) => {
+		switch(item.type) {
+			case 'card2Card':
+				item.type = 'Перевод с карты на карту';
+				break;
+			case 'paymentMobile':
+				item.type = 'Пополнение телефона';
+				break;
+			case 'prepaidCard':
+				item.type = 'Пополнение карты';
+				break;
+			case 'withdrawCard':
+				item.type = 'Снятие с карты';
+				break;
+		}
 		if ((typeof item.data) === 'object') {
 			for (let key in item.data) {
 				item.data = item.data[key];

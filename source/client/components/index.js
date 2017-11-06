@@ -19,4 +19,6 @@ export {default as Routes} from './Routes';
 export {default as CardCreate} from './CardCreate';
 export {default as Report} from './Report';
 export {default as Charts} from './Charts';
-export {default as Dough} from './Dough';
+export {default as ChartType} from './ChartType';
+export {default as ChartData} from './ChartData';
+export {default as ChartDate} from './ChartDate';

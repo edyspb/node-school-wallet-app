@@ -213,23 +213,26 @@ class App extends Component {
 		});
 		let pane;
 		if (isCharts) {
-			pane = (<Charts cardId={activeCard.id} />);
+			pane = (<Charts
+				cardId={activeCard.id}
+				onCloseCharts={() => this.setState({isCharts: false})} />
+			);
 		} else {
 			pane = (
 				<CardPane>
-					<Header activeCard={activeCard}/>
+					<Header activeCard={activeCard} />
 					<Workspace>
-						<History cardHistory={filteredHistory}/>
+						<History cardHistory={filteredHistory} />
 						<Prepaid
 							activeCard={activeCard}
 							inactiveCardsList={inactiveCardsList}
 							onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)}
-							onTransaction={() => this.onTransaction()}/>
-						<MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction()}/>
+							onTransaction={() => this.onTransaction()} />
+						<MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction()} />
 						<Withdraw
 							activeCard={activeCard}
 							inactiveCardsList={inactiveCardsList}
-							onTransaction={() => this.onTransaction()}/>
+							onTransaction={() => this.onTransaction()} />
 					</Workspace>
 				</CardPane>
 			);
