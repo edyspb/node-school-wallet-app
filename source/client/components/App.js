@@ -3,6 +3,7 @@ import styled from 'emotion/react';
 import {injectGlobal} from 'emotion';
 import CardInfo from 'card-info';
 import axios from 'axios';
+import Cookies from 'universal-cookie';
 
 import {
 	CardsBar,
@@ -91,6 +92,9 @@ class App extends Component {
 	constructor(props) {
 		super();
 
+		const cookies = new Cookies();
+		console.log('accessToken', cookies.get('accessToken'));
+
 		const data = props.data;
 		const cardsList = App.prepareCardsData(data.cards);
 		const cardHistory = App.prepareHistory(cardsList, data.transactions);
@@ -101,8 +105,13 @@ class App extends Component {
 			activeCardIndex: 0,
 			removeCardId: 0,
 			isCardRemoving: false,
-			isCardsEditable: false
+			isCardsEditable: false,
+			user: data.user,
+			accessToken: cookies.get('accessToken'),
 		};
+
+		this.onTransaction = this.onTransaction.bind(this);
+		this.onCreated = this.onCreated.bind(this);
 	}
 
 	/**
@@ -130,7 +139,8 @@ class App extends Component {
 	* Функция вызывает при успешной транзакции
 	*/
 	onTransaction() {
-		axios.get('api/v1/cards').then(({data}) => {
+		const { accessToken } = this.state;
+		axios.get('api/v1/cards', {accessToken}).then(({data}) => {
 			const cardsList = App.prepareCardsData(data);
 			this.setState({cardsList});
 
@@ -173,12 +183,8 @@ class App extends Component {
 			});
 	}
 
-	onCreated(newCard) {
-		const cards = this.props.data.cards;
-		cards[cards.length] = newCard;
-		const cardsList = App.prepareCardsData(cards);
-		const cardHistory = App.prepareHistory(cardsList, []);
-		this.setState({cardsList, cardHistory});
+	onCreated() {
+		this.onTransaction();
 	}
 
 	onDeleted() {
@@ -201,13 +207,19 @@ class App extends Component {
 	 * @returns {JSX}
 	 */
 	render() {
-		const {cardsList, activeCardIndex, cardHistory, isCardsEditable, isCardRemoving, removeCardId} = this.state;
+		const { isAuthenticated } = this.props.data;
+		const {cardsList, activeCardIndex, cardHistory, isCardsEditable, isCardRemoving, removeCardId, user} = this.state;
 		const activeCard = cardsList[activeCardIndex];
 
 		const inactiveCardsList = cardsList.filter((card, index) => (index === activeCardIndex ? false : card));
 		const filteredHistory = cardHistory.filter((data) => {
 			return Number(data.cardId) == activeCard.id;
 		});
+
+		if (!isAuthenticated) {
+			return <div />;
+		}
+
 
 		return (
 			<Wallet>
@@ -220,25 +232,28 @@ class App extends Component {
 					isCardRemoving={isCardRemoving}
 					deleteCard={(index) => this.deleteCard(index)}
 					onChangeBarMode={(event, index) => this.onChangeBarMode(event, index)}
-					onCreated={(newCard) => this.onCreated(newCard)}
+					onCreated={this.onCreated}
 					onDeleted={() => this.onDeleted()}
 					onCancelClick={() => this.onCancelClick()} />
-				<CardPane>
-					<Header activeCard={activeCard} />
+				 <CardPane>
+					<Header activeCard={activeCard} user={user} />
+					{ activeCard ?
 					<Workspace>
-						<History cardHistory={filteredHistory} />
-						<Prepaid
+						 <History cardHistory={filteredHistory} /> 
+						 { cardsList.length > 1 ?  <Prepaid
 							activeCard={activeCard}
 							inactiveCardsList={inactiveCardsList}
 							onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)}
-							onTransaction={() => this.onTransaction()} />
+							onTransaction={() => this.onTransaction()} /> : <div /> }	
 						<MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction()} />
-						<Withdraw
+						{ cardsList.length > 1 ? <Withdraw
 							activeCard={activeCard}
 							inactiveCardsList={inactiveCardsList}
-							onTransaction={() => this.onTransaction()} />
+							onTransaction={() => this.onTransaction()} /> : <div /> }	
 					</Workspace>
-				</CardPane>
+					: <div /> }
+				</CardPane> 
+				
 			</Wallet>
 		);
 	}

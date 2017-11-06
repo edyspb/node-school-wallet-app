@@ -103,26 +103,33 @@ class CardCreate extends Component {
 			event.preventDefault();
 		}
 
+		
 		const {cardNumber,  balance} = this.state;
 
-		const preValid = !isNaN(parseFloat(cardNumber)) && isFinite(cardNumber) &&
-			!isNaN(parseFloat(balance)) && isFinite(balance);
-
-		if(!preValid) {
-			this.setState({error: true});
-			return;
-		}
-
+		// const preValid = !isNaN(parseFloat(cardNumber)) && isFinite(cardNumber) &&
+			//!isNaN(parseFloat(balance)) && isFinite(balance);
+		
+		//console.log('onSubmitForm', preValid);	
+		// if(!preValid) {
+		// 	this.setState({error: true});
+		// 	return;
+		// }
+		console.log('onSubmitForm',2);
+		
 		axios
-			.post('/cards/', {cardNumber, balance})
+			.post('api/v1/cards/', {cardNumber, balance, userId: 558183568})
 			.then((response) => {
-				const newCard = response.data;
-				newCard.cardNumber = Number(newCard.cardNumber);
-				newCard.balance = Number(newCard.balance);
-				this.props.onCreated(newCard);
-				this.setState({isView: false, error: false});
+				// const newCard = response.data;
+				// newCard.cardNumber = Number(newCard.cardNumber);
+				// newCard.balance = Number(newCard.balance);
+				this.props.onCreated();
+				// this.setState({isView: false, error: false});
 			})
-			.catch((error) => {if(error) this.setState({error: true});});
+			.catch((error) => { if(error) {
+				console.log('error on create', error);
+				this.setState({error: true}); 
+			}
+	    });
 	}
 
 	onChangeInputValue(event) {

@@ -46,11 +46,11 @@ function onReport(activeCard) {
 
 const Header = ({activeCard, user}) => (
 	<HeaderLayout>
-		<Balance>
+		{ activeCard ? <div><Balance>
 			{`${activeCard.bankName}: `}
 			<BalanceSum>{`${activeCard.balance} ₽`}</BalanceSum>
 		</Balance>
-		<Report onClick={() => onReport(activeCard)}>Запросить отчет</Report>
+		<Report onClick={() => onReport(activeCard)}>Запросить отчет</Report> </div> : <div> Нет доступных карт </div> }
 		<UserInfo user={user} />
 	</HeaderLayout>
 );
@@ -61,8 +61,7 @@ Header.propTypes = {
 		balance: PropTypes.number.isRequired
 	}),
 	user: PropTypes.shape({
-		login: PropTypes.string.isRequired,
-		name: PropTypes.string.isRequired
+		display_name: PropTypes.string.isRequired,
 	})
 };
 

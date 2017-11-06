@@ -6,6 +6,7 @@ import serialize from 'serialize-javascript';
 import {Routes} from '../client/components';
 
 module.exports = (url, appData) => {
+
 	const app = renderToString(<StaticRouter location={url} context={{}}>
 		<Routes appData={appData} />
 	</StaticRouter>);
@@ -15,7 +16,7 @@ module.exports = (url, appData) => {
 	return (
 		<html>
 			<head>
-				<meta charset='utf-8' />
+				<meta charSet='utf-8' />
 				<title>Node School App</title>
 				<link rel='shortcut icon' href='/public/favicon.ico' />
 				<link rel='stylesheet' href='index.css' />

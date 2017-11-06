@@ -1,9 +1,14 @@
 const utils = require('../../../libs/utils');
 const mongoose = require('mongoose');
+
 const Card = mongoose.model('Card', {
   id: {
     type: Number,
     required: true
+  },
+  userId: {
+    type: Number,
+    required: true,
   },
   cardNumber: {
     type: String,

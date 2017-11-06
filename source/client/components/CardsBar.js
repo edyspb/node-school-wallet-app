@@ -78,7 +78,7 @@ const CardsBar = ({
 						</Card>
 					))
 				}
-				<Card type='new' onCreated={(newCard) => onCreated(newCard)} />
+				<Card type='new' onCreated={onCreated} />
 			</CardsList>
 			<Footer>Yamoney Node School</Footer>
 		</Layout>

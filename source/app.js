@@ -6,14 +6,18 @@ const https = require('https');
 const path = require('path');
 const Koa = require('koa');
 const serve = require('koa-static');
+const axios = require('axios');
 const getRouter = require('koa-router');
+const cookie = require('koa-cookie');
 const bodyParser = require('koa-bodyparser')();
+const querystring = require('querystring');
 
 const logger = require('libs/logger')('app');
 
 const {renderToStaticMarkup} = require('react-dom/server');
 
 const getCardsController = require('./controllers/cards/get-cards');
+const isAuthenticated = require('./controllers/authentication/isAuthenticated');
 const createCardController = require('./controllers/cards/create');
 const deleteCardController = require('./controllers/cards/delete');
 const getTransactionController = require('./controllers/transactions/get');
@@ -27,14 +31,20 @@ const errorController = require('./controllers/error');
 const ApplicationError = require('libs/application-error');
 const CardsModel = require('source/models/cards');
 const TransactionsModel = require('source/models/transactions');
+const UsersModel = require('source/models/users');
 
 const getTransactionsController = require('./controllers/transactions/get-transactions');
 
 const getReport = require('./service/getReport');
 
+const yandexOAuth = {
+	client_id: '3b8a4438962941d68d286f15fdeaacc2',
+	client_secret: '041ea88829ab48ecb4210188d4ee2ffa',
+};
+
 const mongoose = require('mongoose');
 
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://127.0.0.1/yandexdb';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb://localhost/school-wallet';   //'mongodb://127.0.0.1/yandexdb';
 mongoose.connect(MONGODB_URI, { useMongoClient: true });
 mongoose.Promise = global.Promise;
 
@@ -50,24 +60,27 @@ function getView(viewId) {
 }
 
 async function getData(ctx) {
-	const user = {
-		login: 'samuel_johnson',
-		name: 'Samuel Johnson'
-	};
-	const cards = await ctx.cardsModel.getAll();
-	const transactions = await ctx.transactionsModel.getAll();
-	return {
-		user,
-		cards,
-		transactions
-	};
+	const data = await isAuthenticated(ctx);
+	data.cards = [];
+	data.transactions = [];
+	if (data.isAuthenticated) {
+		//data.cards = await ctx.cardsModel.getAll();
+		//data.transactions = await ctx.transactionsModel.getAll();
+
+		data.cards = await ctx.cardsModel.getByAll({userId: data.user.id});
+		data.transactions = await ctx.transactionsModel.getByAll({userId: data.user.id});
+	}
+
+	return data;
 }
 
 // Сохраним параметр id в ctx.params.id
 clientRouter.param('id', (id, ctx, next) => next());
 
 clientRouter.all('client', '*', async (ctx) => {
+
 	const data = await getData(ctx);
+
 	const indexView = getView('index');
 	const indexViewHtml = renderToStaticMarkup(indexView(ctx.originalUrl, data));
 
@@ -87,6 +100,44 @@ apiRouter.post('/cards/:id/fill', mobileToCard);
 
 apiRouter.get('/transactions/', getTransactionsController);
 apiRouter.get('/report/:id', getReport);
+apiRouter.get('/auth', async (ctx) => {
+	const codeForToken = ctx.originalUrl.replace('/api/v1/auth?code=', '');
+
+	let accessToken;
+
+	// console.log('authApp', authApp);
+	await axios.post('https://oauth.yandex.ru/token', querystring.stringify({
+		grant_type: 'authorization_code',
+		code: codeForToken,
+		client_secret: yandexOAuth.client_secret,
+		client_id: yandexOAuth.client_id,
+	})).then((answer) => {
+		accessToken = answer.data.access_token;
+		console.log('access_token', accessToken);
+	}).catch((err) => {
+		console.log('err', err);
+	});
+
+
+	if (accessToken === undefined) {
+		ctx.redirect('/');
+	}
+
+    let userBio;
+	await axios.get('https://login.yandex.ru/info?format=json&with_openid_identity=1',
+	{ headers: { Authorization: `OAuth ${accessToken}`}}).then((answer) => {
+		userBio = answer.data;
+	}).catch((err) => {
+		console.log('err', err);
+	});
+
+	await ctx.usersModel.findOrCreate(userBio);
+	ctx.cookies.set('accessToken', accessToken, {httpOnly: false});
+	ctx.redirect('/workspace');
+});
+
+apiRouter.post('/isAuthenticated', isAuthenticated);
+
 apiRouter.all('/error', errorController);
 
 // inizialize routes
@@ -117,11 +168,13 @@ app.use(async (ctx, next) => {
 app.use(async (ctx, next) => {
 	ctx.cardsModel = new CardsModel();
 	ctx.transactionsModel = new TransactionsModel();
+	ctx.usersModel = new UsersModel();
 
 	await next();
 });
 
 
+app.use(cookie.default());
 app.use(bodyParser);
 app.use(serve('./public'));
 app.use(appRouter.routes());

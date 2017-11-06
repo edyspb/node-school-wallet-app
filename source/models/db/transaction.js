@@ -9,6 +9,10 @@ const Transaction = mongoose.model('Transaction', {
     default: Date.now
   },
   sum: String,
+  userId: {
+    type: Number,
+    required: true,
+  },
   id: {
     type: Number,
     required: true
