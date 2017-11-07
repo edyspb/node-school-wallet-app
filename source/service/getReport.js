@@ -5,7 +5,7 @@ module.exports = async (ctx) => {
 	const name = 'reportFile';
 	const format = ctx.params.format;
 	const cardId = Number(ctx.params.id);
-
+	console.log(ctx);
 	const startTransactions = await ctx.transactionsModel.getByCard(cardId);
 	startTransactions.forEach((item) => {
 		switch(item.type) {
