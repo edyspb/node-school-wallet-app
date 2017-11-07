@@ -15,7 +15,7 @@ module.exports = async (ctx) => {
 
 	const transaction = await ctx.transactionsModel.create({
 		cardId: sourceCard.id,
-		type: 'withdrawCard',
+		type: 'card2Card',
 		data: {
 			cardNumber: targetCard.cardNumber
 		},
