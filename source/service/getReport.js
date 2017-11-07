@@ -5,8 +5,8 @@ module.exports = async (ctx) => {
 	const name = 'reportFile';
 	const format = ctx.params.format;
 	const cardId = Number(ctx.params.id);
-
-	const startTransactions = await ctx.transactionsModel.getByCard(cardId);
+	const userId = ctx.authData.user.id;
+	const startTransactions = await ctx.transactionsModel.getByCard(cardId, userId);
 	startTransactions.forEach((item) => {
 		switch(item.type) {
 			case 'card2Card':
