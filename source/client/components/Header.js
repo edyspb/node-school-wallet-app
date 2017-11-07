@@ -22,6 +22,7 @@ color: ${({textColor}) => textColor};
 }
 `;
 
+
 const HeaderLayout = styled.header`
 	display: flex;
 	justify-content: space-between;
