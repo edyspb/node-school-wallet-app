@@ -81,7 +81,6 @@ clientRouter.param('id', (id, ctx, next) => next());
 clientRouter.all('client', '*', async (ctx) => {
 
 	const data = await getData(ctx);
-
 	const indexView = getView('index');
 	const indexViewHtml = renderToStaticMarkup(indexView(ctx.originalUrl, data));
 

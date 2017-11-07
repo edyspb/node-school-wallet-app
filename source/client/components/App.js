@@ -11,7 +11,8 @@ import {
 	History,
 	Prepaid,
 	MobilePayment,
-	Withdraw
+	Withdraw,
+	Charts
 } from './';
 
 import './fonts.css';
@@ -106,6 +107,7 @@ class App extends Component {
 			removeCardId: 0,
 			isCardRemoving: false,
 			isCardsEditable: false,
+			isCharts: false,
 			user: data.user,
 			accessToken: cookies.get('accessToken'),
 		};
@@ -141,7 +143,7 @@ class App extends Component {
 	onTransaction() {
 		const { accessToken } = this.state;
 
-		
+
 		axios.get('api/v1/cards', {headers: {AccessToken: accessToken}}).then(({data}) => {
 			const cardsList = App.prepareCardsData(data);
 			this.setState({cardsList});
@@ -172,7 +174,7 @@ class App extends Component {
 	 */
 	deleteCard(id) {
 		axios
-			.delete(`/api/cards/${id}`)
+			.delete(`/api/v1/cards/${id}`)
 			.then(() => {
 				axios.get('api/v1/cards').then(({data}) => {
 					const cardsList = App.prepareCardsData(data);
@@ -211,7 +213,7 @@ class App extends Component {
 	render() {
 		const { isAuthenticated } = this.props.data;
 		const { singOut } = this.props;
-		const {cardsList, activeCardIndex, cardHistory, isCardsEditable, isCardRemoving, removeCardId, user} = this.state;
+		const {cardsList, activeCardIndex, cardHistory, isCardsEditable, isCardRemoving, removeCardId, isCharts, user} = this.state;
 		const activeCard = cardsList[activeCardIndex];
 
 		const inactiveCardsList = cardsList.filter((card, index) => (index === activeCardIndex ? false : card));
@@ -223,7 +225,39 @@ class App extends Component {
 			return <div />;
 		}
 
-
+		let pane;
+		if (isCharts) {
+			pane = (
+				<div>
+					<Header activeCard={activeCard} />
+					<Charts
+						cardId={activeCard.id}
+						onCloseCharts={() => this.setState({isCharts: false})} />
+				</div>
+			);
+		} else {
+			pane = (
+				<CardPane>
+					<Header activeCard={activeCard} />
+					{ activeCard ?
+					<Workspace>
+						<History cardHistory={filteredHistory} />
+						{ cardsList.length > 1 ?
+						<Prepaid
+							activeCard={activeCard}
+							inactiveCardsList={inactiveCardsList}
+							onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)}
+							onTransaction={() => this.onTransaction()} /> : <div /> }
+						<MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction()} />
+						{ cardsList.length > 1 ? <Withdraw
+							activeCard={activeCard}
+							inactiveCardsList={inactiveCardsList}
+							onTransaction={() => this.onTransaction()} /> : <div /> }
+					</Workspace>
+						: <div /> }
+				</CardPane>
+			);
+		}
 		return (
 			<Wallet>
 				<CardsBar
@@ -237,26 +271,9 @@ class App extends Component {
 					onChangeBarMode={(event, index) => this.onChangeBarMode(event, index)}
 					onCreated={this.onCreated}
 					onDeleted={() => this.onDeleted()}
-					onCancelClick={() => this.onCancelClick()} />
-				 <CardPane>
-					<Header activeCard={activeCard} user={user} singOut={singOut} />
-					{ activeCard ?
-					<Workspace>
-						 <History cardHistory={filteredHistory} /> 
-						 { cardsList.length > 1 ?  <Prepaid
-							activeCard={activeCard}
-							inactiveCardsList={inactiveCardsList}
-							onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)}
-							onTransaction={() => this.onTransaction()} /> : <div /> }	
-						<MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction()} />
-						{ cardsList.length > 1 ? <Withdraw
-							activeCard={activeCard}
-							inactiveCardsList={inactiveCardsList}
-							onTransaction={() => this.onTransaction()} /> : <div /> }	
-					</Workspace>
-					: <div /> }
-				</CardPane> 
-				
+					onCancelClick={() => this.onCancelClick()}
+					onScreen={() => this.setState({isCharts: true})} />
+				{pane}
 			</Wallet>
 		);
 	}

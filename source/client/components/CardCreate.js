@@ -103,17 +103,16 @@ class CardCreate extends Component {
 			event.preventDefault();
 		}
 
-		
 		const {cardNumber,  balance} = this.state;
 
-		// const preValid = !isNaN(parseFloat(cardNumber)) && isFinite(cardNumber) &&
-			//!isNaN(parseFloat(balance)) && isFinite(balance);
-		
-		//console.log('onSubmitForm', preValid);	
-		// if(!preValid) {
-		// 	this.setState({error: true});
-		// 	return;
-		// }
+		const preValid = !isNaN(parseFloat(cardNumber)) && isFinite(cardNumber) &&
+			!isNaN(parseFloat(balance)) && isFinite(balance);
+
+		if(!preValid) {
+			this.setState({error: true});
+			return;
+		}
+
 		axios
 			.post('api/v1/cards/', {cardNumber, balance })
 			.then((response) => {
@@ -127,7 +126,7 @@ class CardCreate extends Component {
 			})
 			.catch((error) => { if(error) {
 				console.log('error on create', error);
-				this.setState({error: true}); 
+				this.setState({error: true});
 			}
 	    });
 	}
