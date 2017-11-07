@@ -5,12 +5,11 @@ import {Doughnut} from 'react-chartjs-2';
 
 const Layout = styled.div`
 	display: inline-block;
-	margin: 20px;
-	padding: 0px 70px;
-	font-size: 18px;
+	margin: 20px 0px;
+	padding: 0px 2%;
 	text-align: center;
-	width: 500px;
-	height: 450px;
+	width: 50%;
+	max-width: 650px;
 `;
 
 class ChartData extends Component {
@@ -39,9 +38,8 @@ class ChartData extends Component {
 		}
 		return (
 			<Layout>
-				По данным
 				<Doughnut
-					height={400}
+					height={200}
 					data={{
 						datasets: [{
 							data: data.map((item) => {
@@ -50,11 +48,11 @@ class ChartData extends Component {
 							backgroundColor: [
 								'Red',
 								'Lime',
+								'Blue',
 								'DeepPink',
 								'Yellow',
 								'LightSeaGreen',
 								'Orange',
-								'Blue',
 								'Green',
 								'DarkKhaki',
 								'Magenta'
@@ -63,6 +61,20 @@ class ChartData extends Component {
 						labels: data.map((item) => {
 							return item.data
 						})
+					}}
+					options={{
+						responsive: true,
+						legend: {
+							labels: {
+								fontSize: 18
+							},
+							position: 'bottom',
+						},
+						title: {
+							display: true,
+							text: 'По Данным',
+							fontSize: 22
+						}
 					}} />
 			</Layout>
 		);

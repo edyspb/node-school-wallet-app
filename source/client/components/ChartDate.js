@@ -6,12 +6,11 @@ import {Bar} from 'react-chartjs-2';
 
 const Layout = styled.div`
 	display: inline-block;
-	margin: 20px;
-	padding: 0px 50px;
-	font-size: 18px;
+	margin: 20px 2%;
+	padding: 0px 2%;
 	text-align: center;
-	width: 900px;
-	height: 300px;
+	width: 96%;
+	max-width: 1300px;
 `;
 
 class ChartDate extends Component {
@@ -42,8 +41,8 @@ class ChartDate extends Component {
 		}
 		return (
 			<Layout>
-				По дате
 				<Bar
+					height={80}
 					data={{
 						datasets: [{
 							data: data.map((item) => {
@@ -56,8 +55,14 @@ class ChartDate extends Component {
 						})
 					}}
 					options={{
+						responsive: true,
 						legend: {
-							display: false
+							display: false,
+						},
+						title: {
+							display: true,
+							text: 'По дате',
+							fontSize: 22
 						}
 					}} />
 			</Layout>

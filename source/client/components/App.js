@@ -213,9 +213,13 @@ class App extends Component {
 		});
 		let pane;
 		if (isCharts) {
-			pane = (<Charts
-				cardId={activeCard.id}
-				onCloseCharts={() => this.setState({isCharts: false})} />
+			pane = (
+				<div>
+					<Header activeCard={activeCard} />
+					<Charts
+						cardId={activeCard.id}
+						onCloseCharts={() => this.setState({isCharts: false})} />
+				</div>
 			);
 		} else {
 			pane = (

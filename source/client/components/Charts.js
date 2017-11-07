@@ -5,7 +5,6 @@ import {Button, ChartType, ChartData, ChartDate} from './';
 import axios from 'axios';
 
 const DivButton = styled.div`
-	display: inline-block;
 	width: 200px;
 	height: 50px;
 `;
@@ -19,8 +18,9 @@ const BackButton = styled(Button)`
 const Handle = styled.div`
 	display: inline-block;
 	font-size: 31px;
-	padding-left: 200px;
-	width: 900px;
+	width: 100%;
+	max-width: 1300px;
+	text-align: center;
 `;
 
 class Charts extends Component {
