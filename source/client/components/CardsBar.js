@@ -18,18 +18,6 @@ const Logo = styled.div`
 	background-image: url('/assets/yamoney-logo.svg');
 `;
 
-const Edit = styled.div`
-	position: absolute;
-	top: 17px;
-	right: 12px;
-	width: 34px;
-	height: 35px;
-	cursor: pointer;
-	background-image: url('/assets/${({editable}) => (editable ? 'cards-edit-active' : 'cards-edit')}.svg');
-	background-repeat: no-repeat;
-	background-position: center center;
-`;
-
 const CardsList = styled.div`this.state.activeCard.id
 	flex: 1;
 `;
@@ -40,7 +28,7 @@ const Footer = styled.footer`
 `;
 
 const CardsBar = ({
-	activeCardIndex, cardsList, onCardChange, onEditChange, isCardsEditable, isCardRemoving, onChangeBarMode,
+	activeCardIndex, cardsList, onCardChange, isCardsEditable, isCardRemoving, onChangeBarMode,
 	removeCardId, deleteCard, onCreated, onDeleted, onCancelClick, onScreen
 }) => {
 	const onCardClick = (index) => {
@@ -83,7 +71,7 @@ const CardsBar = ({
 			</CardsList>
 			<Footer>Yamoney Node School</Footer>
 		</Layout>
-);
+	);
 };
 
 CardsBar.propTypes = {

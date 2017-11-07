@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import PropTypes from 'prop-types';
 import styled from 'emotion/react';
 import moment from 'moment';
 import {Bar} from 'react-chartjs-2';
