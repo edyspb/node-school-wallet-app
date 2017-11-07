@@ -218,6 +218,9 @@ class App extends Component {
 
 		const inactiveCardsList = cardsList.filter((card, index) => (index === activeCardIndex ? false : card));
 		const filteredHistory = cardHistory.filter((data) => {
+			// TODO: изменить генерацию id карт
+			if (activeCard === undefined) return false;
+
 			return Number(data.cardId) == activeCard.id;
 		});
 
