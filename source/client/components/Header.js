@@ -47,7 +47,7 @@ const Header = ({activeCard, user, singOut}) => (
 		{ activeCard ? <div><Balance>
 			{`${activeCard.bankName}: `}
 			<BalanceSum>{`${activeCard.balance} ₽`}</BalanceSum>
-		</Balance>
+			</Balance></div> : <div></div>}
 		<UserInfo user={user} />
 		<StyledButton onClick={singOut}>
 		   Выйти
