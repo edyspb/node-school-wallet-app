@@ -116,7 +116,7 @@ const History = ({cardHistory}) => {
 						<HistoryItemTitle>
 							{getHistoryItemTitle(item)}
 						</HistoryItemTitle>
-						<HistoryItemTime>
+						<HistoryItemTime data-test-id={'history-item-time'}>
 							{historyItemDate.format('HH:mm')}
 						</HistoryItemTime>
 						<HistoryItemSum>
@@ -129,8 +129,8 @@ const History = ({cardHistory}) => {
 			return result;
 		}, []);
 		return content.length === 0
-			? <HistoryContent><HistoryEmpty>История операций пуста</HistoryEmpty></HistoryContent>
-			: <HistoryContent>{content}</HistoryContent>;
+			? <HistoryContent data-test-id={'history-content'}><HistoryEmpty>История операций пуста</HistoryEmpty></HistoryContent>
+			: <HistoryContent data-test-id={'history-content'}>{content}</HistoryContent>;
 	};
 
 	return (

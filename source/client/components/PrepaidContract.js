@@ -156,7 +156,7 @@ class PrepaidContract extends Component {
 		const selectedCard = inactiveCardsList[activeCardIndex];
 
 		return (
-			<form onSubmit={(event) => this.onSubmitForm(event)}>
+			<form data-test-id={'prepaid-contract-form'} onSubmit={(event) => this.onSubmitForm(event)}>
 				<PrepaidLayout>
 					<PrepaidTitle>Пополнить карту</PrepaidTitle>
 
@@ -190,6 +190,7 @@ class PrepaidContract extends Component {
 
 					<InputField>
 						<SumInput
+							data-test-id={'prepaid-contract-input'}
 							name='sum'
 							value={this.state.sum}
 							onChange={(event) => this.onChangeInputValue(event)} />
