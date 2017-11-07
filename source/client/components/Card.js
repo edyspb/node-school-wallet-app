@@ -97,10 +97,11 @@ class Card extends Component {
 	 * @returns {JSX}
 	 */
 	render() {
-		const {data, type, active, isSingle, onClick, isCardsEditable, onChangeBarMode} = this.props;
+		
+		const {data, type, active, isSingle, onClick, isCardsEditable, onChangeBarMode, onCreated } = this.props;
 		if (type === 'new') {
 			return (
-				<CardCreate onCreated={(newCard) => this.props.onCreated(newCard)} />
+				<CardCreate onCreated={onCreated} />
 			);
 		}
 

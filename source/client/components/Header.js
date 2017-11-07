@@ -2,8 +2,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'emotion/react';
 import {Title, UserInfo} from './';
-import axios from 'axios';
 
+
+const StyledButton = styled.button`
+height: 36px;
+width: 120px;
+font-size: 13px;
+font-weight: 600;
+border: none;
+border-radius: 3px;
+cursor: pointer;
+background-color: ${({bgColor}) => bgColor};
+color: ${({textColor}) => textColor};
+
+&:focus,
+&:hover {
+	background-color: ${({bgColor}) => bgColor};
+	color: ${({textColor}) => textColor};
+}
+`;
 
 const HeaderLayout = styled.header`
 	display: flex;
@@ -24,34 +41,17 @@ const BalanceSum = styled.span`
 	font-weight: bold;
 `;
 
-const Report = styled.a`
-	margin: 0;
-	cursor: pointer;
-	font-size: 24px;
-	font-weight: 600;
-	color: #000;
-`;
 
-function onReport(activeCard) {
-	axios
-		.get(`/report/${activeCard.id}`)
-		.then((response) => {
-			const link = document.createElement("a");
-			link.download = 'reportFile';
-			link.href = `/report/${activeCard.id}`;
-			link.click();
-		})
-		.catch((error) => {if(error) console.log('error', error)});
-}
-
-const Header = ({activeCard, user}) => (
+const Header = ({activeCard, user, singOut}) => (
 	<HeaderLayout>
-		<Balance>
+		{ activeCard ? <div><Balance>
 			{`${activeCard.bankName}: `}
 			<BalanceSum>{`${activeCard.balance} ₽`}</BalanceSum>
-		</Balance>
-		<Report onClick={() => onReport(activeCard)}>Запросить отчет</Report>
+			</Balance></div> : <div></div>}
 		<UserInfo user={user} />
+		<StyledButton onClick={singOut}>
+		   Выйти
+		</StyledButton>
 	</HeaderLayout>
 );
 
@@ -61,8 +61,7 @@ Header.propTypes = {
 		balance: PropTypes.number.isRequired
 	}),
 	user: PropTypes.shape({
-		login: PropTypes.string.isRequired,
-		name: PropTypes.string.isRequired
+		display_name: PropTypes.string.isRequired,
 	})
 };
 

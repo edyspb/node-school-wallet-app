@@ -55,7 +55,12 @@ class DbModel extends Model {
 			.limit(1)
 			.lean()
 			.exec();
-		return data[0].id + 1;
+
+		let newID = 1;
+		if (data.length > 0) {
+			newID = data[0].id + 1;
+		}
+		return newID;
 	}
 
 	async _insert(item) {
