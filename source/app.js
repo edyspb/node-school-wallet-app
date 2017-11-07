@@ -99,7 +99,7 @@ apiRouter.post('/cards/:id/pay', cardToMobile);
 apiRouter.post('/cards/:id/fill', mobileToCard);
 
 apiRouter.get('/transactions/', getTransactionsController);
-apiRouter.get('/report/:id', getReport);
+apiRouter.get('/report/:id/:format', getReport);
 authRouter.get('/auth', async (ctx) => {
 	const codeForToken = ctx.originalUrl.replace('/api/yandex/auth?code=', '');
 

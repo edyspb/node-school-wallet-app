@@ -229,7 +229,7 @@ class App extends Component {
 		if (isCharts) {
 			pane = (
 				<div>
-					<Header activeCard={activeCard} />
+					<Header activeCard={activeCard} user={user} singOut={singOut} />
 					<Charts
 						cardId={activeCard.id}
 						onCloseCharts={() => this.setState({isCharts: false})} />
@@ -238,23 +238,23 @@ class App extends Component {
 		} else {
 			pane = (
 				<CardPane>
-					<Header activeCard={activeCard} />
-					{ activeCard ?
-					<Workspace>
-						<History cardHistory={filteredHistory} />
-						{ cardsList.length > 1 ?
-						<Prepaid
-							activeCard={activeCard}
-							inactiveCardsList={inactiveCardsList}
-							onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)}
-							onTransaction={() => this.onTransaction()} /> : <div /> }
-						<MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction()} />
-						{ cardsList.length > 1 ? <Withdraw
-							activeCard={activeCard}
-							inactiveCardsList={inactiveCardsList}
-							onTransaction={() => this.onTransaction()} /> : <div /> }
-					</Workspace>
-						: <div /> }
+					<Header activeCard={activeCard} user={user} singOut={singOut} />
+					{activeCard ?
+						<Workspace>
+							<History cardHistory={filteredHistory}/>
+							{cardsList.length > 1 ?
+								<Prepaid
+									activeCard={activeCard}
+									inactiveCardsList={inactiveCardsList}
+									onCardChange={(newActiveCardIndex) => this.onCardChange(newActiveCardIndex)}
+									onTransaction={() => this.onTransaction()}/> : <div/>}
+							<MobilePayment activeCard={activeCard} onTransaction={() => this.onTransaction()}/>
+							{cardsList.length > 1 ? <Withdraw
+								activeCard={activeCard}
+								inactiveCardsList={inactiveCardsList}
+								onTransaction={() => this.onTransaction()}/> : <div/>}
+						</Workspace>
+						: <div/>}
 				</CardPane>
 			);
 		}
